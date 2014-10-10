@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gy.Entity.CarMonitorEntity;
+
 public class QueryCars extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -92,7 +94,7 @@ public class QueryCars extends HttpServlet {
 
 	public String getQueryResult(int intdays){
 		String result =   ""; 
-		List<CarMonitorEntity> listcars= new carsDAO().getCarMonitorEntity(intdays);
+		List<CarMonitorEntity> listcars= new CarDAO().getCarMonitorEntity(intdays);
 		int line=1;
 		String linecolor ="";
 		for (CarMonitorEntity cartmp : listcars) {

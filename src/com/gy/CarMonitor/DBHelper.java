@@ -5,8 +5,8 @@ import java.sql.*;
 
 public class DBHelper {	
 //	private String dbUrl="jdbc:mysql://localhost:3306/sushe";
-	static String dbUrl="jdbc:oracle:thin:@112.124.114.79:1521:ORCL";  	
-//	static String dbUrl="jdbc:oracle:thin:@192.168.1.185:1523:LENGLIAN";
+//	static String dbUrl="jdbc:oracle:thin:@112.124.114.79:1521:ORCL";  	
+	static String dbUrl="jdbc:oracle:thin:@192.168.1.185:1523:LENGLIAN";
 	private String dbUser="sa";
 	private String dbPassword="sa";
     static String jdbcName="oracle.jdbc.driver.OracleDriver";  

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gy.DAO.CarDAO;
 import com.gy.Entity.CarMonitorEntity;
 
 public class QueryCars extends HttpServlet {

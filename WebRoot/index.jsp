@@ -15,10 +15,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<meta http-equiv="refresh" content="0;url=./QueryCars?querydays=1">
 	<!--
+	<meta http-equiv="refresh" content="0;url=./QueryCars?querydays=1">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
+	<h1 align="center" ><a href="/CarMonitor/QueryCars">QueryCars</a></h1>
+	<h1 align="center" ><a href="/CarMonitor/OracleMonitor">OracleMonitor</a></h1>
+	<h1 align="center" ><a href="/CarMonitor/RealMonitor">RealMonitor</a></h1>	
+	  
+	
+	
+	
+	
   </head>
   
   <body>

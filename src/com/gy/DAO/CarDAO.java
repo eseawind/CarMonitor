@@ -1,4 +1,4 @@
-package com.gy.CarMonitor;
+package com.gy.DAO;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gy.CarMonitor.DBHelper;
 import com.gy.Entity.CarMonitorEntity;
  
 public class CarDAO {

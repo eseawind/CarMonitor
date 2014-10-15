@@ -56,7 +56,7 @@ public class OracleMonitorDAO {
 		System.err.println(System.currentTimeMillis());
 		List<OracleProcTaskEntity> listobject = new ArrayList<OracleProcTaskEntity>();
 		conn  = new DBHelper().getConn(); 
-		sql="select job,what,last_date,last_sec,next_date,next_sec,lower(interval) as interval from user_jobs order by what ";		
+		sql="select job,what,last_date,last_sec,next_date,next_sec,lower(interval) as interval from user_jobs order by last_date desc , what ";		
 			try {
 				stat = conn.createStatement();
 //				System.err.println(sql);

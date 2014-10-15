@@ -32,16 +32,17 @@ public class OracleMonitor extends HttpServlet {
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException { 
-		String querydays = request.getParameter("queryDays"); 
+			throws ServletException, IOException {  
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();  
+		out.append("<title>古易车辆监控</title>");  
 		out.append("<h1 align=\"left\" ><a href=\"/CarMonitor\">返回</a>" +
 				"  &nbsp;&nbsp;&nbsp;<a href=\"/CarMonitor/OracleMonitor\">刷新</a>"+
 				"</h1>"); 
-		
-		out.append("<h2 align=\"center\">--数据库定时任务监控--</h2 >");
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String strdate = sd.format(new Date());		
+		out.append("<h2 align=\"center\">--数据库定时任务监控--</h2 >"+"服务器时间:"+strdate);
 		//job,what,last_date,last_sec,next_date,next_sec,interval
 		out.append("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"+
 				"<tr align=\"left\"  class=\"t1\">"+
@@ -111,9 +112,9 @@ public class OracleMonitor extends HttpServlet {
 			obj.what +"</td><td>" +
 			obj.last_date +"</td><td>" +
 			obj.last_sec +"</td><td>" + 
+			obj.interval +"</td><td>" + 
 			obj.next_date +"</td><td>" + 
 			obj.next_sec +"</td><td>" + 
-			obj.interval +"</td><td>" + 
 			"</tr>";
 			line++;
 		}

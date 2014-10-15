@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head> 
     <base href="<%=basePath%>">
     
-    <title>鍙ゆ槗杞﹁締鐩戞帶</title>
+    <title>古易车辆监控</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    

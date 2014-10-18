@@ -24,10 +24,36 @@ public static void main(String[] args) {
 //		// TODO Auto-generated catch block
 //		e.printStackTrace();
 //	}    
-	Calendar calendar1 = Calendar.getInstance();
-	calendar1.add(Calendar.DAY_OF_YEAR, -1);
-	System.err.println(calendar1.getTimeInMillis());
-	long ii =calendar1.getTimeInMillis();
-	System.err.println(ii/86400);
+	
+	
+//	Calendar calendar1 = Calendar.getInstance();
+//	calendar1.add(Calendar.DAY_OF_YEAR, -1);
+//	System.err.println(calendar1.getTimeInMillis());
+//	long ii =calendar1.getTimeInMillis();
+//	System.err.println(ii/86400);
+	
+//	Calendar calendar=Calendar.getInstance();   
+//	   calendar.setTime(new Date()); 
+//	   System.out.println(calendar.get(Calendar.ZONE_OFFSET));//今天的日期 
+	
+//    Date d=new Date();   
+//    SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd");   
+//    System.out.println("今天的日期："+df.format(d)); 
+//     
+//    System.out.println("两天前的日期：" + df.format(new Date(d.getTime() - 2 * 24 * 60 * 60 * 1000)));  
+//    System.out.println("三天后的日期：" + df.format(new Date(d.getTime() + 3 * 24 * 60 * 60 * 1000)));	
+
+	
+	Date d=new Date();
+	SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd"); 
+	String d2 = df.format(new Date(d.getTime() - 2 * 24 * 60 * 60 * 1000)); 
+	try {
+		Date date = df.parse(d2); //得到凌晨的时间
+		System.err.println(date.getTime());
+	} catch (ParseException e) { 
+		e.printStackTrace();
+	}
+	
+ 
 }
 }

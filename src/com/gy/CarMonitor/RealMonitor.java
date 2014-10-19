@@ -47,10 +47,10 @@ public class RealMonitor extends HttpServlet {
 				"</h2>"); 
 		
 		out.append("<h2 align=\"center\">--终端实时数据监控"+"--</h2 >"+"服务器时间:"+strdate);
-			out.append("<table width=\"130%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"+
+			out.append("<table width=\"140%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
 						"<tr align=\"center\"  class=\"t1\">"+
 						"<td height=\"25\" align=\"left\" bgcolor=\"#D5E4F4\"><strong>所属公司-车牌-终端ID</strong></td>"+ 
-				 		"<td bgcolor=\"#D5E4F4\"><strong>安全数据汇报时间</strong></td>" +
+				 		"<td bgcolor=\"#D5E4F1\"><strong>安全数据汇报时间</strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> 增量里程 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> 线速度 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></td>" +
@@ -62,10 +62,10 @@ public class RealMonitor extends HttpServlet {
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;终端状态 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;报警状态 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;车距 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> 国标位置时间0200 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> 国标上报位置0200 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> 终端状态0200 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> 报警状态0200 </strong></td>" +
+				 		"<td bgcolor=\"#FF0000\"><strong> 国标位置时间0200 </strong></td>" +
+				 		"<td bgcolor=\"#FF0000\"><strong> 国标上报位置0200 </strong></td>" +
+				 		"<td bgcolor=\"#FF0000\"><strong> 终端状态0200 </strong></td>" +
+				 		"<td bgcolor=\"#FF0000\"><strong> 报警状态0200 </strong></td>" +
 				 		"</tr>"    
 //				 		 
 				 ); 
@@ -93,23 +93,23 @@ public class RealMonitor extends HttpServlet {
 				}
 				result =result+"<tr "+linecolor+ " align=\"center\">" +
 				"<td height=\"25\" align=\"left\">"+  
-				real.cp_name+"-"+real.PLATENO +"</td><td align=\"left\">" +
-				real.LASTTIME +"</td><td>" +
-				real.LINE_DIS +"</td><td>" +
-				real.LINE_SPEED +"</td><td>" +
-				real.GPS +"</td><td>" +
-				real.GPS_SPEED +"</td><td>" +
-				real.GPS_F +"</td><td>" +
-				real.OILVALUE +"</td><td>" +
-				real.OILMASS +"</td><td>" +
-				real.tempvalue +"</td><td>" +
-				real.TER_STATUS +"</td><td>" +
-				real.WARN_TYPE +"</td><td>" +
-				real.DIS_FRONT +"</td><td>" +
-				real.POSTIME0200 +"</td><td>" +
-				real.GPS0200 +"</td><td>" +
-				real.TERSTATUS0200 +"</td><td>" +
-				real.WARN0200 +"</td><td>" +
+				real.cp_name+"-"+real.PLATENO +"</td>" +
+				"<td align=\"left\">"+real.LASTTIME +"</td>" +
+				"<td>" + real.LINE_DIS +"</td>" +
+				"<td>" +real.LINE_SPEED +"</td>" +
+				"<td>" + real.GPS.replaceAll(" ", "") +"</td>" +
+				"<td>" + real.GPS_SPEED +"</td>" +
+				"<td>" +real.GPS_F.replaceAll(" ", "") +"</td>" +
+				"<td>" +real.OILVALUE +"</td>" +
+				"<td>" +real.OILMASS +"</td>" +
+				"<td>" +real.tempvalue +"</td>" +
+				"<td>" +real.TER_STATUS +"</td>" +
+				"<td>" +real.WARN_TYPE +"</td>" +
+				"<td>" +real.DIS_FRONT +"</td>" +
+				"<td bordercolor=\"#FF0000\"  >" +real.POSTIME0200 +"</td>" +
+				"<td bordercolor=\"#FF0000\"  >" +real.GPS0200.replaceAll(" ", "") +"</td>" +
+				"<td bordercolor=\"#FF0000\"  >" +real.TERSTATUS0200 +"</td>" +
+				"<td bordercolor=\"#FF0000\"  >" +real.WARN0200 +"</td>" +
 				"</tr>";
 				if (line<2) {					
 					System.err.println(result);
@@ -123,7 +123,8 @@ public class RealMonitor extends HttpServlet {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		RealMonitor rm = new RealMonitor();
+		rm.getRealInfo();
 	}
 
 }

@@ -44,7 +44,7 @@ public class OracleMonitor extends HttpServlet {
 		String strdate = sd.format(new Date());		
 		out.append("<h2 align=\"center\">--数据库定时任务监控--</h2 >"+"服务器时间:"+strdate);
 		//job,what,last_date,last_sec,next_date,next_sec,interval
-		out.append("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"+
+		out.append("<table width=\"100%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
 				"<tr align=\"left\"  class=\"t1\">"+
 				"<td height=\"25\" bgcolor=\"#D5E4F4\"><strong>任务ID</strong></td>"+ 
 		 		"<td bgcolor=\"#D5E4F4\"><strong>任务名称</strong></td>" +
@@ -86,7 +86,7 @@ public class OracleMonitor extends HttpServlet {
 			"<td height=\"25\" align=\"center\">"+ 
 			obj.STATUS + "</td><td>" +
 			obj.object_type +"</td><td>" +
-			obj.OBJECT_NAME +"</td><td>" + 
+			obj.OBJECT_NAME +"</td>" + 
 			"</tr>";
 			line++;
 		}
@@ -114,7 +114,7 @@ public class OracleMonitor extends HttpServlet {
 			obj.last_sec +"</td><td>" + 
 			obj.interval +"</td><td>" + 
 			obj.next_date +"</td><td>" + 
-			obj.next_sec +"</td><td>" + 
+			obj.next_sec +"</td>" + 
 			"</tr>";
 			line++;
 		}

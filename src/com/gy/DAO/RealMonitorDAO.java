@@ -26,30 +26,6 @@ public class RealMonitorDAO {
 	public List<RealMonitorEntity> getRealInfoList(){
 		System.err.println(System.currentTimeMillis());
 		List<RealMonitorEntity> list= new ArrayList<RealMonitorEntity>();
-//		sql ="select t2.plate_no || '/' || t1.ter_id as plateno,"+
-//	     "  gtime(firsttime) as firsttime,"+
-//	     "  gtime(lasttime) as lasttime,"+
-//	     "  line_dis,"+
-//	     "  trunc(t1.line_speed,2) as line_speed,"+
-//	     "  trunc(t1.gps_speed,2) as gps_speed, "+
-//	     "  trunc(t1.gps_lon,4)||','|| trunc(t1.gps_lat,4) as gps,"+
-//	     "  trunc(t1.gps_lon_f,4)||','|| trunc(t1.gps_lat_f,4) as gps_f, "+
-//	     "  trunc(t1.oilvalue) as oilvalue,"+
-//	     "  trunc(t1.oilmass,1) as oilmass, "+
-//	     "  t1.ter_status,"+
-//	     "  t1.warn_type,"+
-//	     "  t1.dis_front,"+
-//	     "  t3.postime0200,"+
-//	     "  t3.gps0200 ,"+
-//	     "  t3.ter_status as terstatus0200,"+
-//	     "  t3.ter_warn as warn0200, "+
-//	     "  t1.tempvalue as tempvalue "+
-//	 " from sa.tbl_s_safe_real t1"+
-//	 " inner join  tbl_s_terminal t2 on  t1.ter_id = t2.id "+
-//	 " left join ("+
-//	 " select ter_id,gtime(pos_time)as postime0200,pos_long||','||pos_lat as gps0200,ter_status,ter_warn,row_number() " +
-//	 " over(partition by ter_id order by id desc )cnt from sa.tbl_s_terminal_pos "+
-//	 " )t3 on t1.ter_id = t3.ter_id and t3.cnt =1  ";
 		sql ="select t2.plate_no || '-' || t1.ter_id as plateno,"+
 	     "  gtime(firsttime) as firsttime,"+
 	     "  to_char(gtime(lasttime),'yyyy-mm-dd hh24:mi:ss') as lasttime,"+
@@ -63,17 +39,18 @@ public class RealMonitorDAO {
 	     "  t1.ter_status,"+
 	     "  t1.warn_type,"+
 	     "  t1.dis_front,"+
-	     "  to_char(gtime(postime0200),'yyyy-mm-dd hh24:mi:ss') as postime0200,"+
-	     "  t3.gps0200 ,"+
+	     "  nvl(to_char(gtime(postime0200),'yyyy-mm-dd hh24:mi:ss'),'-') as postime0200,"+
+	     "  nvl(t3.gps0200,'-') as gps0200 ,"+
 	     "  t3.ter_status as terstatus0200,"+
 	     "  t3.ter_warn as warn0200, "+
 	     "  t1.tempvalue as tempvalue, "+
-	     "  t4.cp_name " +
+	     "  nvl(t4.cp_name,'') as cp_name " +
 	 " from sa.tbl_s_safe_real t1"+
 	 " inner join  tbl_s_terminal t2 on  t1.ter_id = t2.id "+
 	 " inner join  tbl_company t4 on  t2.cp_id = t4.id "+
 	 " left join ("+
-	 "  select ter_id,pos_time as postime0200,pos_long||','||pos_lat as gps0200,ter_status,ter_warn from sa.tbl_s_terminal_last_pos " +
+	 "  select ter_id,pos_time as postime0200,to_char(pos_long,'990.0000')||','||to_char(pos_lat,'990.0000') as gps0200,ter_status,ter_warn " +
+	 "from sa.tbl_s_terminal_last_pos " +
 	 " )t3 on t1.ter_id = t3.ter_id  order by t4.cp_name desc ,t1.lasttime desc   ";
 		System.err.println(sql);
 		conn  = new DBHelper().getConn(); 
@@ -103,7 +80,7 @@ public class RealMonitorDAO {
 				obj.GPS=rs.getString("GPS");
 				if (obj.GPS.equals(",")) {
 					obj.GPS="-";
-				}				
+				}
 				obj.GPS_F=rs.getString("GPS_F");
 				if (obj.GPS_F.equals(",")) {
 					obj.GPS_F="-";
@@ -115,6 +92,9 @@ public class RealMonitorDAO {
 				obj.DIS_FRONT=rs.getString("DIS_FRONT");
 				obj.POSTIME0200=rs.getString("POSTIME0200");
 				obj.GPS0200=rs.getString("GPS0200");
+				if (obj.GPS0200 == null||obj.GPS0200.equals(",") ) {
+					obj.GPS0200="----";
+				}				
 				obj.TERSTATUS0200=rs.getString("TERSTATUS0200");
 				obj.WARN0200=rs.getString("WARN0200");		
 				obj.tempvalue=rs.getString("tempvalue");

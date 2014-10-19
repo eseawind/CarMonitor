@@ -3,6 +3,6 @@ package com.gy.Entity;
 public class OffLineStatEntity {
 
 
-public String plate_no,offcount,offduration,onlineduration;
-public String oilused,curmiles;
+public String plate_no,offcount,offSecends,onSeconds;
+public String cp_name;
 }

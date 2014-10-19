@@ -76,11 +76,9 @@ public class OffLineDAO {
 				} catch (Exception e) {
 					System.err.println("Òì³£¼ÍÂ¼"+rs.getString("ter_id"));	
 					e.printStackTrace();
-//					System.err.println(rs.getString("offduration"));
 				}
 				listofflinedetails.add( offlinetmp);
 			}
-//			System.err.println(listofflinedetails);
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();

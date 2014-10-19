@@ -4,5 +4,5 @@ public class OffLineStatEntity {
 
 
 public String plate_no,offcount,offSecends,onSeconds;
-public String cp_name;
+public String cp_name,ter_id;
 }

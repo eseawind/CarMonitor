@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.gy.DAO.OracleMonitorDAO;
 import com.gy.Entity.CarMonitorEntity;
 import com.gy.Entity.DBObjectEntity;
+import com.gy.Entity.DBProcLogEntity;
 import com.gy.Entity.OracleProcTaskEntity;
 
 public class OracleMonitor extends HttpServlet {
@@ -36,7 +37,7 @@ public class OracleMonitor extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();  
-		out.append("<title>古易车辆监控</title>");  
+		out.append("<title>DB监控</title>");  
 		out.append("<h1 align=\"left\" ><a href=\"/CarMonitor\">返回</a>" +
 				"  &nbsp;&nbsp;&nbsp;<a href=\"/CarMonitor/OracleMonitor\">刷新</a>"+
 				"</h1>"); 
@@ -54,8 +55,22 @@ public class OracleMonitor extends HttpServlet {
 		 		"<td bgcolor=\"#D5E4F4\"><strong>下次执行时间1</strong></td>"+
 		 		"<td bgcolor=\"#D5E4F4\"><strong>下次执行时间2</strong></td>"+
 		 		"</tr>") ;	
-		out.append(getDBTaskList());
+		out.append(getDBTaskList()); 
 		out.append("</table>");
+		out.append("<h2 align=\"center\">--存储过程执行日志--</h2>");
+		out.append("<table width=\"100%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
+				"<tr align=\"center\"  class=\"t1\">"+
+				"<td bgcolor=\"#D5E4F4\"><strong>任务名称</strong></td>"+ 
+		 		"<td bgcolor=\"#D5E4F4\"><strong>执行时长</strong></td>" +
+		 		"<td bgcolor=\"#D5E4F4\"><strong>开始时间</strong></td>"+
+		 		"<td bgcolor=\"#D5E4F4\"><strong>结束时间</strong></td>"+
+		 		"<td bgcolor=\"#D5E4F4\"><strong>执行结果</strong></td>"+
+		 		"<td bgcolor=\"#D5E4F4\"><strong>备注</strong></td>"+
+		 		"</tr>") ;	
+		out.append(getProcLogList());  //存储过程日志		
+		out.append("</table>");		
+		
+		//数据库对象监控 
 		out.append("<h2 align=\"center\">--数据库无效对象监控--</h2>");
 		out.append("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"+
 				"<tr align=\"center\"  class=\"t1\">"+
@@ -66,10 +81,15 @@ public class OracleMonitor extends HttpServlet {
 		out.append(getDBInvalidObject());		
 		out.append("</table>");	
 		out.append("<br><br><br>");	
+		out.append("<h1 align=\"left\" ><a href=\"/CarMonitor\">返回</a>" +
+					"&nbsp;&nbsp;&nbsp;<a href=\"/CarMonitor/OracleMonitor\">刷新</a>"+
+					"</h1>"); 
 		out.flush();
 		out.close();		
 	}
-
+	/**
+	 * 数据库无效对象监控
+	 * */
 	public String getDBInvalidObject(){
 		OracleMonitorDAO omdao = new OracleMonitorDAO();
 		List<DBObjectEntity>  listDBojb = omdao.getDBInvalidObject();
@@ -91,8 +111,35 @@ public class OracleMonitor extends HttpServlet {
 			line++;
 		}
 		return strresult;
+	} 
+	/**
+	 * 查看存储过程日志表 
+	 * */
+	public String getProcLogList(){
+		OracleMonitorDAO omdao = new OracleMonitorDAO();
+		List<DBProcLogEntity>  loglist = omdao.getProcLogList();
+		String strresult ="";
+		String linecolor="";
+		int line =1;
+		for (DBProcLogEntity prolog : loglist) {
+			if (line%2==0) {
+				linecolor="bgcolor=\"#D5E4ff\"";
+			}else{
+				linecolor="";
+			}
+			strresult=strresult+"<tr "+linecolor+ " align=\"center\">" +
+			"<td>"+prolog.taskname+   "</td>"   +
+			"<td>"+prolog.duration+   "</td>"   +
+			"<td>"+prolog.starttime+   "</td>"  +
+			"<td>"+prolog.finishtime+  "</td>" +
+			"<td>"+prolog.isfinished+  "</td>" +
+			"<td>"+prolog.describtion+ "</td>"+
+			"</tr>";
+			;
+			line++;
+		}
+			return strresult;
 	}
-
 	public String getDBTaskList(){
 		OracleMonitorDAO omdao = new OracleMonitorDAO();
 		List<OracleProcTaskEntity>  listDBojb = omdao.getDBProcTaskList();

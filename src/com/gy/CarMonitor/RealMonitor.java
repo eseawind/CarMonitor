@@ -41,16 +41,16 @@ public class RealMonitor extends HttpServlet {
  
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String strdate = sd.format(new Date());
-		out.append("<title>古易车辆监控</title>"); 
+		out.append("<title>实时监控</title>"); 
 		out.append("<h2 align=\"left\" ><a href=\"/CarMonitor\">返回</a>" +
 				"  &nbsp;&nbsp;&nbsp;<a href=\"/CarMonitor/RealMonitor\">刷新</a>"+
 				"</h2>"); 
 		
 		out.append("<h2 align=\"center\">--终端实时数据监控"+"--</h2 >"+"服务器时间:"+strdate);
-			out.append("<table width=\"140%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
+			out.append("<table width=\"150%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
 						"<tr align=\"center\"  class=\"t1\">"+
 						"<td height=\"25\" align=\"left\" bgcolor=\"#D5E4F4\"><strong>所属公司-车牌-终端ID</strong></td>"+ 
-				 		"<td bgcolor=\"#D5E4F1\"><strong>安全数据汇报时间</strong></td>" +
+						"<td bgcolor=\"#D5E4F1\"><strong>安全数据汇报时间</strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> 增量里程 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> 线速度 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></td>" +
@@ -62,6 +62,7 @@ public class RealMonitor extends HttpServlet {
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;终端状态 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;报警状态 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;车距 </strong></td>" +
+				 		"<td bgcolor=\"#FF0000\"><strong>车牌-终端ID</strong></td>"+				 		
 				 		"<td bgcolor=\"#FF0000\"><strong> 国标位置时间0200 </strong></td>" +
 				 		"<td bgcolor=\"#FF0000\"><strong> 国标上报位置0200 </strong></td>" +
 				 		"<td bgcolor=\"#FF0000\"><strong> 终端状态0200 </strong></td>" +
@@ -91,9 +92,16 @@ public class RealMonitor extends HttpServlet {
 				}else{
 					linecolor="";
 				}
+				String strisonline ="";
+				if (real.isonline.equals("1")) {
+//					strisonline = "<td bgcolor=\"00a032\" align=\"center\">在线</td>";
+					strisonline="<td align=\"left\">"+"<font color=\"00a032\">●</font>"+real.cp_name+"-"+real.PLATENO+"</td>";
+				}else {
+//					strisonline = "<td bgcolor=\"ff5000\" align=\"center\">--</td>";
+					strisonline="<td align=\"left\" >"+"<font color=\"c0c0c0\">●</font>"+ real.cp_name+"-"+real.PLATENO +"</td>";
+				}
 				result =result+"<tr "+linecolor+ " align=\"center\">" +
-				"<td height=\"25\" align=\"left\">"+  
-				real.cp_name+"-"+real.PLATENO +"</td>" +
+				strisonline+
 				"<td align=\"left\">"+real.LASTTIME +"</td>" +
 				"<td>" + real.LINE_DIS +"</td>" +
 				"<td>" +real.LINE_SPEED +"</td>" +
@@ -106,6 +114,7 @@ public class RealMonitor extends HttpServlet {
 				"<td>" +real.TER_STATUS +"</td>" +
 				"<td>" +real.WARN_TYPE +"</td>" +
 				"<td>" +real.DIS_FRONT +"</td>" +
+				"<td>" +real.PLATENO +"</td>" +
 				"<td bordercolor=\"#FF0000\"  >" +real.POSTIME0200 +"</td>" +
 				"<td bordercolor=\"#FF0000\"  >" +real.GPS0200.replaceAll(" ", "") +"</td>" +
 				"<td bordercolor=\"#FF0000\"  >" +real.TERSTATUS0200 +"</td>" +

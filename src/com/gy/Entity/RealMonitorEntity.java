@@ -5,7 +5,8 @@ public class RealMonitorEntity {
 			GPS_SPEED, GPS, GPS_F, OILVALUE, OILMASS, TER_STATUS, WARN_TYPE,
 			DIS_FRONT, POSTIME0200, GPS0200, TERSTATUS0200, WARN0200;
 	public String tempvalue, cp_name;
-
+	public String isonline; 
+ 
 	public RealMonitorEntity() {
 //		POSTIME0200 = "";
 //		GPS0200 = "";

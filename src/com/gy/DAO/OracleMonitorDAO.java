@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.gy.CarMonitor.DBHelper;
 import com.gy.Entity.DBObjectEntity;
+import com.gy.Entity.DBProcLogEntity;
 import com.gy.Entity.OracleProcTaskEntity;
 
 public class OracleMonitorDAO {
@@ -45,6 +46,7 @@ public class OracleMonitorDAO {
 				e.printStackTrace();
 			}
 			System.err.println("getDBInvalidObject-end"+System.currentTimeMillis());
+			closeDB();
 			return listobject;
 	}
 
@@ -74,11 +76,70 @@ public class OracleMonitorDAO {
 					listobject.add(obj );
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			System.err.println(System.currentTimeMillis());
+				e.printStackTrace(); 
+			} 
+			closeDB();
 			return listobject;
 	}	
+	public List<DBProcLogEntity> getProcLogList(){
+		List<DBProcLogEntity> prologlist = new ArrayList<DBProcLogEntity>();
+		sql = "select " +
+				"taskname," +
+				"to_char(starttime ,'yyyy-mm-dd hh24:mi:ss') as starttime ," +
+				"to_char(finishtime ,'yyyy-mm-dd hh24:mi:ss') as finishtime," +
+				"isfinished," +
+				"describtion," +
+				"trunc((finishtime-starttime)*86400) as duration  from" +
+				" (select taskname, starttime,finishtime,isfinished,describtion ," +
+				" row_number() over( partition by taskname order by id desc ) as cnt " +
+				" from sa.tbl_s_safe_task_log )where cnt <2 " +
+				" order by taskname ";
+		
+		conn  = new DBHelper().getConn();  
+		try {
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			while (rs.next()) {
+				DBProcLogEntity prolog = new DBProcLogEntity() ;
+				prolog.taskname= rs.getString("taskname");
+				prolog.starttime= rs.getString("starttime");
+				prolog.finishtime= rs.getString("finishtime");
+				prolog.isfinished= rs.getString("isfinished");
+				prolog.describtion= rs.getString("describtion");
+				prolog.duration= rs.getString("duration");
+				prologlist.add(prolog);
+			}
+			
+		} catch (SQLException e) { 
+			e.printStackTrace(); 
+		}
+		closeDB();
+		return prologlist;
+		
+	}
+	
+	
+	private void closeDB(){
+		//关闭数据库
+		try {
+			System.err.println("关闭数据库连接");
+			if (rs !=null) {
+				System.err.println("关闭rs");
+				rs.close();
+			}
+			if (stat!=null) {
+				System.err.println("关闭stat");
+				stat.close();
+			}
+			if (conn!=null) {
+				System.err.println("关闭conn");
+				conn.close();
+			} 		
+		} catch (SQLException e) { 
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		OracleMonitorDAO odao = new OracleMonitorDAO();
 		List<DBObjectEntity>  list = odao.getDBInvalidObject();

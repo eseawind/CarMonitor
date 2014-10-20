@@ -44,14 +44,16 @@ public class RealMonitorDAO {
 	     "  t3.ter_status as terstatus0200,"+
 	     "  t3.ter_warn as warn0200, "+
 	     "  t1.tempvalue as tempvalue, "+
-	     "  nvl(t4.cp_name,'') as cp_name " +
+	     "  nvl(t4.cp_name,'') as cp_name ," +
+	     "  nvl(t2.ter_status,0) as isonline " +
 	 " from sa.tbl_s_safe_real t1"+
 	 " inner join  tbl_s_terminal t2 on  t1.ter_id = t2.id "+
 	 " inner join  tbl_company t4 on  t2.cp_id = t4.id "+
 	 " left join ("+
 	 "  select ter_id,pos_time as postime0200,to_char(pos_long,'990.0000')||','||to_char(pos_lat,'990.0000') as gps0200,ter_status,ter_warn " +
 	 "from sa.tbl_s_terminal_last_pos " +
-	 " )t3 on t1.ter_id = t3.ter_id  order by t4.cp_name desc ,t1.lasttime desc   ";
+	 " )t3 on t1.ter_id = t3.ter_id  " +
+	 " order by t4.cp_name desc ,isonline desc ,t1.lasttime desc   ";
 		System.err.println(sql);
 		conn  = new DBHelper().getConn(); 
 		try {
@@ -59,8 +61,6 @@ public class RealMonitorDAO {
 //			System.err.println(sql);
 			rs = stat.executeQuery(sql);
 			while (rs.next()) {
-//PLATENO,FIRSTTIME,LASTTIME,LINE_DIS,LINE_SPEED,GPS_SPEED,GPS,GPS_F,OILVALUE,
-//OILMASS,TER_STATUS,WARN_TYPE,DIS_FRONT,POSTIME0200,GPS0200,TERSTATUS0200,WARN0200
 				RealMonitorEntity obj = new RealMonitorEntity();  
 				obj.PLATENO=rs.getString("PLATENO");
 				obj.FIRSTTIME=rs.getString("FIRSTTIME");
@@ -99,17 +99,38 @@ public class RealMonitorDAO {
 				obj.WARN0200=rs.getString("WARN0200");		
 				obj.tempvalue=rs.getString("tempvalue");
 				obj.cp_name=rs.getString("cp_name");
+				obj.isonline=rs.getString("isonline");
 				list.add(obj );
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace();			
 		}
 		System.err.println(System.currentTimeMillis());
+		closeDB();
 		return list;
 		 
 	}
 	
-	
+	private void closeDB(){
+		//关闭数据库
+		try {
+			System.err.println("关闭数据库连接");
+			if (rs !=null) {
+				System.err.println("关闭rs");
+				rs.close();
+			}
+			if (stat!=null) {
+				System.err.println("关闭stat");
+				stat.close();
+			}
+			if (conn!=null) {
+				System.err.println("关闭conn");
+				conn.close();
+			} 		
+		} catch (SQLException e) { 
+			e.printStackTrace();
+		}
+	}	
 	/**
 	 * @param args
 	 */

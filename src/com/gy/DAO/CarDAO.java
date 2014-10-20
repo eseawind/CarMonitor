@@ -15,23 +15,7 @@ public class CarDAO {
   
 	Statement stat = null;
 	ResultSet rs = null;
-	
-//    public static void close() {
-//        try {
-//          if (rs != null) {
-//            rs.close();
-//          }
-//          if (stat != null) {
-//        	  stat.close();
-//          }
-//          if (conn != null) {
-//              conn.close();
-//            }
-//        }
-//        catch (Exception e) {
-//          e.printStackTrace(System.err);
-       
-//	return id;
+	 
 	
 	public List<CarMonitorEntity> getCarMonitorEntity(int i){
 		String sql="select " +
@@ -85,7 +69,7 @@ public class CarDAO {
 			System.err.println("carentities:"+carentities.size());
 		}
 		catch(SQLException ex){
-			ex.printStackTrace();
+			ex.printStackTrace();			
 		}
 		//¹Ø±ÕÊý¾Ý¿â
 			try {

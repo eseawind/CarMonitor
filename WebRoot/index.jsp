@@ -24,13 +24,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<br>
 	<br>
 	<h1 align="center"  ><a href="/CarMonitor/OracleMonitor" >
-	<font size="20">1.数据库监控</font></a></h1>
+	<font size="18">1.数据库监控</font></a></h1>
 	<h1 align="center" ><a href="/CarMonitor/RealMonitor">
-	<font size="20">2.终端实时监控</font></a></h1>	
+	<font size="18">2.实时监控</font></a></h1>	
 	<h1 align="center" ><a href="/CarMonitor/OffLineMonitor">
-	<font size="20">3.终端离线统计</font></a></h1>	  
-	<h1 align="center" ><a href="/CarMonitor/OffLineMonitor">
-	<font size="20">4.安全实时数据</font></a></h1>	 	  
+	<font size="18">3.离线统计</font></a></h1>	  
+    
   </head>
   
   <body>

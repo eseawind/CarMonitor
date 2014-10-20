@@ -43,7 +43,7 @@ public class OffLineMonitor extends HttpServlet {
 		
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String strdate = sd.format(new Date());
-		out.append("<title>古易车辆监控</title>"); 
+		out.append("<title>离线统计</title>"); 
 		out.append("<h2 align=\"left\" ><a href=\"/CarMonitor\">返回</a>" +
 				"  &nbsp;&nbsp;&nbsp;<a href=\"/CarMonitor/OffLineMonitor?querydays="+strquerydays+"\">刷新</a>"+
 				"</h2>"); 

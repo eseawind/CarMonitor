@@ -127,12 +127,18 @@ public class OracleMonitor extends HttpServlet {
 			}else{
 				linecolor="";
 			}
+			String striswarn ="";  //结果颜色
+			if (prolog.isfinished.equals("success")) {
+				striswarn="<td><font color=\"00a032\">" +prolog.isfinished+ "</font></td>";
+			}else {
+				striswarn="<td><font color=\"ff0000\">" +prolog.isfinished+ "</font></td>";
+			}
 			strresult=strresult+"<tr "+linecolor+ " align=\"center\">" +
 			"<td>"+prolog.taskname+   "</td>"   +
 			"<td>"+prolog.duration+   "</td>"   +
 			"<td>"+prolog.starttime+   "</td>"  +
 			"<td>"+prolog.finishtime+  "</td>" +
-			"<td>"+prolog.isfinished+  "</td>" +
+			striswarn+ 
 			"<td>"+prolog.describtion+ "</td>"+
 			"</tr>";
 			;
@@ -152,16 +158,22 @@ public class OracleMonitor extends HttpServlet {
 			}else{
 				linecolor="";
 			}
+			String strnextdatte ="";  //结果颜色
+			if (obj.next_date.contains("4000")) {
+				strnextdatte="<td><font color=\"ff0000\">" +obj.next_date+ "</font></td>";
+			}else {
+				strnextdatte="<td><font >" +obj.next_date+ "</font></td>";
+			}		
+			System.err.println("strnextdatte"+strnextdatte);
 			//job,what,last_date,last_sec,next_date,next_sec,interval;
 			strresult =strresult+"<tr "+linecolor+ " align=\"left\">" +
-			"<td height=\"25\" align=\"left\">"+ 
-			obj.job + "</td><td>" +
-			obj.what +"</td><td>" +
-			obj.last_date +"</td><td>" +
-			obj.last_sec +"</td><td>" + 
-			obj.interval +"</td><td>" + 
-			obj.next_date +"</td><td>" + 
-			obj.next_sec +"</td>" + 
+			"<td align=\"left\">"+obj.job + "</td>" +
+			"<td>" +obj.what +"</td>" +
+			"<td>" +obj.last_date +"</td>" +
+			"<td>" +obj.last_sec +"</td>" +
+			"<td>" +obj.interval +"</td>" + 
+			strnextdatte + 
+			"<td>"+obj.next_sec +"</td>" + 
 			"</tr>";
 			line++;
 		}
@@ -176,7 +188,7 @@ public class OracleMonitor extends HttpServlet {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		new OracleMonitor().getDBTaskList();
 	}
 	
 }

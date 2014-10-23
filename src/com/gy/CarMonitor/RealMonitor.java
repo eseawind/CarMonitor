@@ -85,7 +85,7 @@ public class RealMonitor extends HttpServlet {
 		RealMonitorDAO realdao = new RealMonitorDAO();
 		List<RealMonitorEntity> reallist= realdao.getRealInfoList();
 		String linecolor ="";
-		int line=1;
+		int line=1; 
 		for (RealMonitorEntity real:reallist) {
 				if (line%2==0) {
 					linecolor="bgcolor=\"#D5E4ff\"";

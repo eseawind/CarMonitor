@@ -99,28 +99,30 @@ public static void main(String[] args) {
 //	list2.addAll(list);
 //	System.err.println(list2);
 	
-	System.err.println(		"<table width=\"140%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
-						"<tr align=\"center\"  class=\"t1\">"+
-						"<td height=\"25\" align=\"left\" bgcolor=\"#D5E4F4\"><strong>所属公司-车牌-终端ID</strong></td>"+ 
-				 		"<td bgcolor=\"#D5E4F1\"><strong>安全数据汇报时间</strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> 增量里程 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> 线速度 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;GPS速度</strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong>百度gps</strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong>模拟油量</strong></td>" +				 		
-				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;实际油量(升) </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;温度&nbsp; </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;终端状态 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;报警状态 </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;车距 </strong></td>" +
-				 		"<td bgcolor=\"#FF0000\"><strong> 国标位置时间0200 </strong></td>" +
-				 		"<td bgcolor=\"#FF0000\"><strong> 国标上报位置0200 </strong></td>" +
-				 		"<td bgcolor=\"#FF0000\"><strong> 终端状态0200 </strong></td>" +
-				 		"<td bgcolor=\"#FF0000\"><strong> 报警状态0200 </strong></td>" +
-				 		"</tr>"    
-//				 		 
-				 );
+//	System.err.println(		"<table width=\"140%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
+//						"<tr align=\"center\"  class=\"t1\">"+
+//						"<td height=\"25\" align=\"left\" bgcolor=\"#D5E4F4\"><strong>所属公司-车牌-终端ID</strong></td>"+ 
+//				 		"<td bgcolor=\"#D5E4F1\"><strong>安全数据汇报时间</strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong> 增量里程 </strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong> 线速度 </strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;GPS速度</strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong>百度gps</strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong>模拟油量</strong></td>" +				 		
+//				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;实际油量(升) </strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;温度&nbsp; </strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;终端状态 </strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;报警状态 </strong></td>" +
+//				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;车距 </strong></td>" +
+//				 		"<td bgcolor=\"#FF0000\"><strong> 国标位置时间0200 </strong></td>" +
+//				 		"<td bgcolor=\"#FF0000\"><strong> 国标上报位置0200 </strong></td>" +
+//				 		"<td bgcolor=\"#FF0000\"><strong> 终端状态0200 </strong></td>" +
+//				 		"<td bgcolor=\"#FF0000\"><strong> 报警状态0200 </strong></td>" +
+//				 		"</tr>"    
+////				 		 
+//				 );
+	
+	System.err.println("1400`000".contains("4000"));
 }
 }
 

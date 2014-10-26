@@ -19,7 +19,15 @@
   <servlet-name>OffLineMonitor</servlet-name>
   <servlet-class>com.gy.CarMonitor.OffLineMonitor</servlet-class>
  </servlet>
-  
+ <servlet>
+  <servlet-name>ViewMap</servlet-name>
+  <servlet-class>com.gy.CarMonitor.ViewMap</servlet-class>
+ </servlet>
+<servlet>
+  <servlet-name>AbnormalMonitor</servlet-name>
+  <servlet-class>com.gy.CarMonitor.AbnormalMonitor</servlet-class>
+ </servlet> 
+   
  <servlet-mapping>
   <servlet-name>QueryCars</servlet-name>
   <url-pattern>/QueryCars</url-pattern>
@@ -37,7 +45,14 @@
   <servlet-name>OffLineMonitor</servlet-name>
   <url-pattern>/OffLineMonitor</url-pattern>
  </servlet-mapping>
- 
+ <servlet-mapping>
+  <servlet-name>ViewMap</servlet-name>
+  <url-pattern>/ViewMap</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>AbnormalMonitor</servlet-name>
+  <url-pattern>/AbnormalMonitor</url-pattern>
+ </servlet-mapping>  
    
  <welcome-file-list>
   <welcome-file>index.jsp</welcome-file>

@@ -47,7 +47,7 @@ public class RealMonitor extends HttpServlet {
 				"</h2>"); 
 		
 		out.append("<h2 align=\"center\">--终端实时数据监控"+"--</h2 >"+"服务器时间:"+strdate);
-			out.append("<table width=\"150%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
+			out.append("<table width=\"170%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
 						"<tr align=\"center\"  class=\"t1\">"+
 						"<td height=\"25\" align=\"left\" bgcolor=\"#D5E4F4\"><strong>所属公司-车牌-终端ID</strong></td>"+ 
 						"<td bgcolor=\"#D5E4F1\"><strong>安全数据汇报时间</strong></td>" +
@@ -91,7 +91,7 @@ public class RealMonitor extends HttpServlet {
 					linecolor="bgcolor=\"#D5E4ff\"";
 				}else{
 					linecolor="";
-				}
+				}	
 				String strisonline ="";
 				if (real.isonline.equals("1")) {
 //					strisonline = "<td bgcolor=\"00a032\" align=\"center\">在线</td>";
@@ -100,12 +100,15 @@ public class RealMonitor extends HttpServlet {
 //					strisonline = "<td bgcolor=\"ff5000\" align=\"center\">--</td>";
 					strisonline="<td align=\"left\" >"+"<font color=\"c0c0c0\">●</font>"+ real.cp_name+"-"+real.PLATENO +"</td>";
 				}
+				String strGPS = real.GPS.replaceAll(", ", "&lata=").replace(" ", "");
+				String strgpshref= "<a href=/CarMonitor/ViewMap?lona="+strGPS +">" +real.GPS.replaceAll(" ", "") +"</a>";
+				
 				result =result+"<tr "+linecolor+ " align=\"center\">" +
 				strisonline+
 				"<td align=\"left\">"+real.LASTTIME +"</td>" +
 				"<td>" + real.LINE_DIS +"</td>" +
 				"<td>" +real.LINE_SPEED +"</td>" +
-				"<td>" + real.GPS.replaceAll(" ", "") +"</td>" +
+				"<td>" + strgpshref +"</td>" +
 				"<td>" + real.GPS_SPEED +"</td>" +
 				"<td>" +real.GPS_F.replaceAll(" ", "") +"</td>" +
 				"<td>" +real.OILVALUE +"</td>" +

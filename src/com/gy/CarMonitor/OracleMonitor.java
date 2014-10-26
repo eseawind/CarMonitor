@@ -188,7 +188,7 @@ public class OracleMonitor extends HttpServlet {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new OracleMonitor().getDBTaskList();
+		new OracleMonitor().getProcLogList();
 	}
 	
 }

@@ -142,7 +142,8 @@ public class OracleMonitorDAO {
 	
 	public static void main(String[] args) {
 		OracleMonitorDAO odao = new OracleMonitorDAO();
-		List<DBObjectEntity>  list = odao.getDBInvalidObject();
-		System.err.println(list);
+//		List<DBObjectEntity>  list = odao.getDBInvalidObject();
+		odao.getDBProcTaskList();
+//		System.err.println(list);
 	}
 }

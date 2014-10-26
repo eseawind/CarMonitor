@@ -30,6 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<h1 align="center" ><a href="/CarMonitor/OffLineMonitor">
 	<font size="18">3.离线统计</font></a></h1>	  
     
+    <a href="/CarMonitor/ViewMap?lona=119.111&lata=26.111&lonb=119.1&latb=26.1">test</a>
   </head>
   
   <body>

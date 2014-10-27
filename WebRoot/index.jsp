@@ -31,6 +31,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<font size="18">3.离线统计</font></a></h1>	  
     
     <a href="/CarMonitor/ViewMap?lona=119.111&lata=26.111&lonb=119.1&latb=26.1">test</a>
+    
+    <label>ter_id</label><input type="text" value="ter_id" id="ter_id" />
+    <label>pagecount</label><input type="text" value="pagecount" id="pagecount" disabled="disabled" />
+    <input type="button" value="上一页"/>
+    <label id="curpage" name="curpage">1</label>
+    <input type="button" value="下一页" disabled="disabled"/>
+    <label>查询条件</label><input type="text" value="othercondition" id=""othercondition"" />
+    <input type="button" value="查询"/  >
+    
   </head>
   
   <body>

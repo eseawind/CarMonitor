@@ -54,8 +54,9 @@ public class ViewMap extends HttpServlet {
 		if (lonb==null || lonb.equals("")) {
 			strgpspoint2="";
 		}else {
-			strgpspoint2 =" BMap.Convertor.translate(ggPoint2,2,translateCallbackB); \n" ;			
-		}
+			strgpspoint2 =" BMap.Convertor.translate(ggPoint2,0,translateCallbackB); \n" ;			
+		} 
+		 
 		out.append(strhtml1+
 				"<script type=\"text/javascript\">\n" +
 //				" var x ="+ lona +";\n" +
@@ -64,7 +65,7 @@ public class ViewMap extends HttpServlet {
 				" var ggPoint = new BMap.Point("+lona + ","+lata +");\n" +
 				" var ggPoint2 = new BMap.Point("+lonb + ","+latb +");\n" +
 				" var bm = new BMap.Map(\"allmap\");\n" +
-				" bm.centerAndZoom(ggPoint, 13);\n" +
+				" bm.centerAndZoom(ggPoint, 15);\n" +
 				" bm.addControl(new BMap.NavigationControl());\n" +
 				" translateCallbackA = function (point){ \n" +
 				" var marker = new BMap.Marker(point);\n" +
@@ -79,10 +80,38 @@ public class ViewMap extends HttpServlet {
 				" marker.setLabel(label); \n" +
 				" bm.setCenter(point);\n" +
 				" }\n" +
-				" BMap.Convertor.translate(ggPoint,2,translateCallbackA);\n" +
+				" BMap.Convertor.translate(ggPoint,0,translateCallbackA);\n" +
 				strgpspoint2+
-				" </script>\n");
+				" </script>\n"); 
 //		out.append("lona:"+lona+ ",lata="+lata);
+		String strtest ="";
+		strtest =strhtml1 + "<script type=\"text/javascript\">\n" +
+//		" var x ="+ lona +";\n" +
+//		" var y ="+ lata +";\n" +
+//		" var ggPoint =  new BMap.Point(x,y);\n" +
+		" var ggPoint = new BMap.Point("+lona + ","+lata +");\n" +
+		" var ggPoint2 = new BMap.Point("+lonb + ","+latb +");\n" +
+		" var bm = new BMap.Map(\"allmap\");\n" +
+		" bm.centerAndZoom(ggPoint, 13);\n" +
+		" bm.addControl(new BMap.NavigationControl());\n" +
+		" translateCallbackA = function (point){ \n" +
+		" var marker = new BMap.Marker(point);\n" +
+		" bm.addOverlay(marker);\n" +
+		" var label = new BMap.Label(\"Æðµã\",{offset:new BMap.Size(20,-10)});\n" +
+		" marker.setLabel(label); \n" +
+		"	}\n" +
+		" translateCallbackB = function (point){ \n" +
+		" var marker = new BMap.Marker(point);\n" +
+		" bm.addOverlay(marker);\n" +
+		" var label = new BMap.Label(\"ÖÕµã\",{offset:new BMap.Size(20,-10)});\n" +
+		" marker.setLabel(label); \n" +
+		" bm.setCenter(point);\n" +
+		" }\n" +
+		" BMap.Convertor.translate(ggPoint,0,translateCallbackA);\n" +
+		strgpspoint2+
+		" </script>\n";
+		System.err.println(strtest);
+		
 		out.flush();
 		out.close();
 	}

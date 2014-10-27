@@ -27,11 +27,12 @@ public class AbnormalMonitorDAO {
 				"next_gpslon,next_gpslat," +
 				"last_status,next_status," +
 				"crtime " +
-				"from sa.qlj_s_car_exce where  1=1 and (duration_sub>300000 or  last_gpslon<> next_gpslon) ";
+				"from sa.qlj_s_car_exce where  1=1 and ( mod(last_status,2)=1 and  mod(next_status,2)=1 and last_speed > 0 ) ";
 		String strteridcondition =" ";
 		String strpageCondition = " ";
 		if (ter_id !=null & ter_id.length()>0) {
-			strteridcondition =" and ter_id = " +ter_id;
+//			strteridcondition =" and ter_id = " +ter_id;
+			strteridcondition =" " +ter_id;
 		}
 		if (curpage<1) {
 			curpage=1;

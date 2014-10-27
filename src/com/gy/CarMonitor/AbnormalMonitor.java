@@ -31,14 +31,33 @@ public class AbnormalMonitor extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter(); 	
-
+		System.err.println("curpage="+request.getParameter("curpage"));
+		System.err.println("ter_id="+request.getParameter("ter_id"));
+		System.err.println("othercondition="+request.getParameter("othercondition"));
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String strdate = sd.format(new Date());
+		String othercondition = request.getParameter("othercondition");
+		if (othercondition ==null ) {
+			othercondition=" 31 and duration_sub>60000 ";
+		}
 		out.append("<title>异常点监控</title>");
 		out.append("<h2 align=\"left\" ><a href=\"/CarMonitor\">返回</a>"
 						+ "  &nbsp;&nbsp;&nbsp;<a href=\"/CarMonitor/AbnormalMonitor\">刷新</a>"
 						+ "</h2>");
-		out.append("<h2 align=\"center\">--异常点监控"+"--</h2 >"+"服务器时间:"+strdate);
+		out.append("<h2 align=\"center\">--异常点监控"+"--</h2 >");
+		//+"服务器时间:"+strdate 
+		out.append("<form  name=\"form1\" action=\"AbnormalMonitor\" method=\"post\" >");
+		out.append(
+//				"<label>终端ID</label><input type=\"text\" name=\"ter_id\" value=\"\" id=\"ter_id\" />" +
+//				"<label>每页记录数</label><input type=\"text\" name=\"pagecount\" value=\"\" id=\"pagecount\" />" +
+//				"<input type=\"submit\" value=\"上一页\"/>" +
+//				"<label id=\"curpage\" name=\"curpage\" >1</label>" +
+//				"<input type=\"submit\" value=\"下一页\"/>" +
+				"<label>查询条件</label>" +
+				"<input type=\"text\" value=\""+othercondition+ "\""+
+				" name=\"othercondition\" />" +
+				"<input type=\"submit\" value=\"查询\"/>");
+		out.append("</form>");
 		out.append("<table width=\"130%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
 					"<tr align=\"center\"  class=\"t1\">" +
 					"<td bgcolor=\"#D5E4F1\"><strong>地图</strong></td>"+
@@ -57,7 +76,7 @@ public class AbnormalMonitor extends HttpServlet {
 			 		"<td bgcolor=\"#D5E4F4\"><strong>crtime </strong></td>" +
 			 		"</tr>" 
 			 ); 
-		out.append(getAbnormalList(1,"",10));
+		out.append(getAbnormalList(1,othercondition,100));
 		out.append(" </table>" );  
 		out.flush();
 		out.close();

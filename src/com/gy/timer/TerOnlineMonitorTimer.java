@@ -94,12 +94,12 @@ public class TerOnlineMonitorTimer extends TimerTask {
 	 * */
 	private HashMap<String, TerminalInfoEntity> getIntersectionMap(HashMap<String, TerminalInfoEntity> list1,HashMap<String, TerminalInfoEntity> list2){
 		HashMap<String, TerminalInfoEntity> listintersection = new  HashMap<String, TerminalInfoEntity>();
-		listintersection.putAll(list1);	
+//		listintersection.putAll(list1);	
         Iterator itr = list2.entrySet().iterator();
         while (itr.hasNext()) { 
             Map.Entry entry = (Map.Entry) itr.next();
-            if (listintersection.get(entry.getKey())==null ) {
-            	listintersection.remove(entry.getKey() ); 
+            if (list1.get(entry.getKey())!=null ) { 
+            	listintersection.put((String)entry.getKey()  ,  list1.get(entry.getKey()));            	
     			}
 			}  
 		return listintersection;
@@ -129,11 +129,11 @@ public class TerOnlineMonitorTimer extends TimerTask {
 		if (warnLinkedlists.size()>=warncount) {
 			int index = 0 ;
 			for (HashMap<String, TerminalInfoEntity> linkedlist:warnLinkedlists){
-				if (index <= warncount) {
+				if (index < warncount) {
 					newwarnedmaptmp= getIntersectionMap(newwarnedmaptmp, linkedlist);
 				}
 				index++;
-				System.err.println("newwarnedmaptmp:"+newwarnedmaptmp.size());
+				System.err.println("newwarnedmaptmp:"+newwarnedmaptmp.size()+newwarnedmaptmp.hashCode());
 			}
 		} 
 		//跟上次告警记录比对
@@ -160,7 +160,8 @@ public class TerOnlineMonitorTimer extends TimerTask {
 			}else{
 				System.err.println("warnLinkedlists告警列表:"+warnLinkedlists.size() +"warncount"+warncount);
 			}
-		} 		
+		} 	
+		System.err.println("告警解除:"+warnedclearmaptmp);
 		return warnedclearmaptmp ; 
 	}	
 	@Override
@@ -175,7 +176,7 @@ public class TerOnlineMonitorTimer extends TimerTask {
 		//3.获取告警记录 		
 		warnedHashmap=getWarnedMap(warncount);   
 		System.err.println(warned4NoticeHashmap);
-		System.out.println("告警解除为"+warnedclearHashmap.size()+"产生告警记录："+warnedclearHashmap.size()  
+		System.out.println("告警解除为"+warnedclearHashmap.size()  
 		+ " 告警通知列表"+this.warned4NoticeHashmap.size()
 		+ " 终端下线列表"+this.warnedHashmap.size()
 		);

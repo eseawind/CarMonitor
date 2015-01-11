@@ -16,7 +16,7 @@ public class TerOnlineMonitorListner   implements ServletContextListener  {
   	}
 
   	public void contextInitialized(ServletContextEvent event) {
-        int interval = 5000;
+        int interval = 15000;
         if (interval<1000) {
       	  event.getServletContext().log("终端上下线监控TerOnlineMonitorTimer时间隔太小"+interval);  
   		return;

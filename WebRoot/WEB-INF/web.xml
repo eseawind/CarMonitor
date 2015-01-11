@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee   http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ <!--定时器配置  
+<listener>
+  <listener-class>com.gy.listener.TimerListner</listener-class>
+</listener>
+<listener>
+  <listener-class>com.gy.listener.OffMonitorListner</listener-class>
+</listener>
+ <listener>
+  <listener-class>com.gy.timer.GBReportMonitorListner</listener-class>
+ </listener>
+ <listener>
+  <listener-class>com.gy.timer.SafeReportMonitorListner</listener-class>
+ </listener>
+-->
+
+
+ <listener>
+  <listener-class>com.gy.timer.TerOnlineMonitorListner</listener-class>
+ </listener>
  <servlet>
   <description>This is the description of my J2EE component</description>
   <display-name>This is the display name of my J2EE component</display-name>
@@ -14,7 +33,7 @@
  <servlet>
   <servlet-name>RealMonitor</servlet-name>
   <servlet-class>com.gy.CarMonitor.RealMonitor</servlet-class>
- </servlet> 
+ </servlet>
  <servlet>
   <servlet-name>OffLineMonitor</servlet-name>
   <servlet-class>com.gy.CarMonitor.OffLineMonitor</servlet-class>
@@ -23,11 +42,10 @@
   <servlet-name>ViewMap</servlet-name>
   <servlet-class>com.gy.CarMonitor.ViewMap</servlet-class>
  </servlet>
-<servlet>
+ <servlet>
   <servlet-name>AbnormalMonitor</servlet-name>
   <servlet-class>com.gy.CarMonitor.AbnormalMonitor</servlet-class>
- </servlet> 
-   
+ </servlet>
  <servlet-mapping>
   <servlet-name>QueryCars</servlet-name>
   <url-pattern>/QueryCars</url-pattern>
@@ -36,11 +54,10 @@
   <servlet-name>RealMonitor</servlet-name>
   <url-pattern>/RealMonitor</url-pattern>
  </servlet-mapping>
- 
  <servlet-mapping>
   <servlet-name>OracleMonitor</servlet-name>
   <url-pattern>/OracleMonitor</url-pattern>
- </servlet-mapping>  
+ </servlet-mapping>
  <servlet-mapping>
   <servlet-name>OffLineMonitor</servlet-name>
   <url-pattern>/OffLineMonitor</url-pattern>
@@ -52,8 +69,7 @@
  <servlet-mapping>
   <servlet-name>AbnormalMonitor</servlet-name>
   <url-pattern>/AbnormalMonitor</url-pattern>
- </servlet-mapping>  
-   
+ </servlet-mapping>
  <welcome-file-list>
   <welcome-file>index.jsp</welcome-file>
  </welcome-file-list>

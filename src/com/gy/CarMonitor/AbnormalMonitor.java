@@ -29,7 +29,11 @@ public class AbnormalMonitor extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {  
 		response.setContentType("text/html");
-		response.setCharacterEncoding("utf-8");
+		//解决中文问题
+		response.setContentType("text/html;charset=gbk");
+		request.setCharacterEncoding("gbk");
+		//end 解决中文问题
+//		response.setCharacterEncoding("gbk");
 		PrintWriter out = response.getWriter(); 	
 		System.err.println("curpage="+request.getParameter("curpage"));
 		System.err.println("ter_id="+request.getParameter("ter_id"));
@@ -60,7 +64,7 @@ public class AbnormalMonitor extends HttpServlet {
 		out.append("</form>");
 		out.append("<table width=\"130%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\">"+
 					"<tr align=\"center\"  class=\"t1\">" +
-					"<td bgcolor=\"#D5E4F1\"><strong>地图</strong></td>"+
+					"<td bgcolor=\"#D5E4F1\"><strong>查看地图</strong></td>"+
 					"<td height=\"25\" align=\"left\" bgcolor=\"#D5E4F4\"><strong>ter_id</strong></td>"+ 
 					"<td bgcolor=\"#D5E4F1\"><strong>last_recid</strong></td>" +
 			 		"<td bgcolor=\"#D5E4F4\"><strong> next_recid </strong></td>" +
@@ -76,7 +80,7 @@ public class AbnormalMonitor extends HttpServlet {
 			 		"<td bgcolor=\"#D5E4F4\"><strong>crtime </strong></td>" +
 			 		"</tr>" 
 			 ); 
-		out.append(getAbnormalList(1,othercondition,100));
+		out.append(getAbnormalList(1,othercondition,200));
 		out.append(" </table>" );  
 		out.flush();
 		out.close();
@@ -97,8 +101,32 @@ public class AbnormalMonitor extends HttpServlet {
 			}else{
 				linecolor="";
 			}
-			String maphref = "<td><a href=\"/CarMonitor/ViewMap?lona=" + abnor.last_gpslon +"&lata=" +
-			abnor.last_gpslat+"&lonb="+ abnor.next_gpslon + "&latb="+ abnor.next_gpslat+ "\">地图</a></td>";
+			String strrunningtype ="";
+			int intrunningtype =Integer.valueOf(abnor.runningtype); 
+			switch (intrunningtype) {
+			case 1:
+				strrunningtype="异常离线";
+				break;
+			case 2:
+				strrunningtype="进出隧道";
+				break;
+			case 3:
+				strrunningtype="停车休眠";
+				break;
+			case 4:
+				strrunningtype="停车2+";
+				break;
+			case 5:
+				strrunningtype="隧道口附近";
+				break;					
+			default:
+				strrunningtype="其他";
+				break;
+			}
+			String maphref = "<td><a href=\"/CarMonitor/ViewMap?lona=" + abnor.next_gpslon  +"&lata=" +
+			abnor.next_gpslat +"&lonb="+abnor.last_gpslon + "&latb="+abnor.last_gpslat + "\">" +
+			strrunningtype +
+					"</a></td>";
 			
 			
 			result =result+"<tr "+linecolor+ " align=\"center\">" +

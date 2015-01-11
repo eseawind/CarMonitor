@@ -51,20 +51,20 @@ public class RealMonitor extends HttpServlet {
 						"<tr align=\"center\"  class=\"t1\">"+
 						"<td height=\"25\" align=\"left\" bgcolor=\"#D5E4F4\"><strong>所属公司-车牌-终端ID</strong></td>"+ 
 						"<td bgcolor=\"#D5E4F1\"><strong>安全数据汇报时间</strong></td>" +
+						"<td bgcolor=\"#FF0000\"><strong> 国标位置时间0200 </strong></td>" +
+						"<td bgcolor=\"#FF0000\"><strong> 国标上报位置0200 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> 增量里程 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> 线速度 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong>&nbsp;GPS速度</strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong>百度gps</strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong>模拟油量</strong></td>" +				 		
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;实际油量(升) </strong></td>" +
-				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;温度&nbsp; </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;终端状态 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;报警状态 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;车距 </strong></td>" +
+				 		"<td bgcolor=\"#D5E4F4\"><strong> &nbsp;温度&nbsp; </strong></td>" +
+				 		"<td bgcolor=\"#D5E4F4\"><strong>百度gps</strong></td>" +
 				 		"<td bgcolor=\"#FF0000\"><strong>车牌-终端ID</strong></td>"+				 		
-				 		"<td bgcolor=\"#FF0000\"><strong> 国标位置时间0200 </strong></td>" +
-				 		"<td bgcolor=\"#FF0000\"><strong> 国标上报位置0200 </strong></td>" +
 				 		"<td bgcolor=\"#FF0000\"><strong> 终端状态0200 </strong></td>" +
 				 		"<td bgcolor=\"#FF0000\"><strong> 报警状态0200 </strong></td>" +
 				 		"</tr>"    
@@ -102,24 +102,26 @@ public class RealMonitor extends HttpServlet {
 				}
 				String strGPS = real.GPS.replaceAll(", ", "&lata=").replace(" ", "");
 				String strgpshref= "<a href=/CarMonitor/ViewMap?lona="+strGPS +">" +real.GPS.replaceAll(" ", "") +"</a>";
-				
+				String strGPS0200 = real.GPS0200.replaceAll(", ", "&lata=").replace(" ", "");
+				String strgpshref0200= "<a href=/CarMonitor/ViewMap?lona="+strGPS0200 +">" +real.GPS0200.replaceAll(" ", "") +"</a>";
 				result =result+"<tr "+linecolor+ " align=\"center\">" +
 				strisonline+
 				"<td align=\"left\">"+real.LASTTIME +"</td>" +
+				"<td bordercolor=\"#FF0000\"  >" +real.POSTIME0200 +"</td>" +
+				//"<td bordercolor=\"#FF0000\"  >" +real.GPS0200.replaceAll(" ", "") +"</td>" +
+				"<td>" + strgpshref0200 +"</td>" +
 				"<td>" + real.LINE_DIS +"</td>" +
 				"<td>" +real.LINE_SPEED +"</td>" +
 				"<td>" + strgpshref +"</td>" +
 				"<td>" + real.GPS_SPEED +"</td>" +
-				"<td>" +real.GPS_F.replaceAll(" ", "") +"</td>" +
 				"<td>" +real.OILVALUE +"</td>" +
 				"<td>" +real.OILMASS +"</td>" +
-				"<td>" +real.tempvalue +"</td>" +
 				"<td>" +real.TER_STATUS +"</td>" +
 				"<td>" +real.WARN_TYPE +"</td>" +
 				"<td>" +real.DIS_FRONT +"</td>" +
+				"<td>" +real.tempvalue +"</td>" +
+				"<td>" +real.GPS_F.replaceAll(" ", "") +"</td>" +
 				"<td>" +real.PLATENO +"</td>" +
-				"<td bordercolor=\"#FF0000\"  >" +real.POSTIME0200 +"</td>" +
-				"<td bordercolor=\"#FF0000\"  >" +real.GPS0200.replaceAll(" ", "") +"</td>" +
 				"<td bordercolor=\"#FF0000\"  >" +real.TERSTATUS0200 +"</td>" +
 				"<td bordercolor=\"#FF0000\"  >" +real.WARN0200 +"</td>" +
 				"</tr>";

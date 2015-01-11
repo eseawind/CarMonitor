@@ -21,13 +21,16 @@ public class AbnormalMonitorDAO {
 		List<AbnormalMonitorEntity> abnormalList = new ArrayList<AbnormalMonitorEntity>();
 		String strbasesql ="select " +
 				"ter_id,last_recid,next_recid," +
-				"last_lasttime,next_lasttime," +
+				"gtime(last_lasttime) as last_lasttime ," +
+				"gtime(next_lasttime) as next_lasttime," +
 				"duration_sub," +
 				"last_gpslon,last_gpslat," +
 				"next_gpslon,next_gpslat," +
 				"last_status,next_status," +
-				"crtime " +
-				"from sa.qlj_s_car_exce where  1=1 and ( mod(last_status,2)=1 and  mod(next_status,2)=1 and last_speed > 0 ) ";
+				"crtime ," +
+				"runningtype " +			
+				" from view_l_abnormalmonitor where  1=1 " ;
+//				"and ( mod(last_status,2)=1 and  mod(next_status,2)=1 and last_speed > 0 ) ";
 		String strteridcondition =" ";
 		String strpageCondition = " ";
 		if (ter_id !=null & ter_id.length()>0) {
@@ -44,7 +47,7 @@ public class AbnormalMonitorDAO {
 		String sql = strbasesql +strteridcondition + " and rownum <=" +curpage*pagecount 
 		+" minus " +
 		strbasesql +strteridcondition + " and rownum <=" +(curpage-1)*pagecount +
-		" order by 1,4 desc ";
+		" order by 1,14,4 desc ";
 		System.err.println(sql);
 		
 		conn = new DBHelper().getConn(); 
@@ -66,14 +69,38 @@ public class AbnormalMonitorDAO {
 				abnormal.last_status = rs.getString("last_status");
 				abnormal.next_status = rs.getString("next_status");
 				abnormal.crtime = rs.getString("crtime");
+				abnormal.runningtype = rs.getString("runningtype");
+				
 //				System.err.println(rs.getString("last_lasttime"));
 				abnormalList.add(abnormal);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace();		
 		} 
+		closeDB();
 		return abnormalList;
 	}
+	private void closeDB(){
+		//关闭数据库
+		try {
+			System.err.println("关闭数据库连接");
+			if (rs !=null) {
+				System.err.println("关闭rs");
+				rs.close();
+			}
+			if (stat!=null) {
+				System.err.println("关闭stat");
+				stat.close();
+			}
+			if (conn!=null) {
+				System.err.println("关闭conn");
+				conn.close();
+			} 		
+		} catch (SQLException e) { 
+			e.printStackTrace();
+		}
+	}	
+	
 	public static void main(String[] args) {
 		AbnormalMonitorDAO dao = new AbnormalMonitorDAO();
 		List<AbnormalMonitorEntity> lsit=dao.getAbnormalDataList(2, "", 40);

@@ -1,195 +1,156 @@
 package com.gy.DAO;
- 
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;  
-import com.gy.CarMonitor.*;  
-import com.gy.Entity.OffLineStatEntity;
+import java.util.List;
+
+import com.gy.CarMonitor.DBHelper;
+import com.gy.Entity.CarMonitorEntity;
+ 
 public class OffLineDAO {
-	//终端上下线明细类
-	class OffLineDetails {
-		public String ter_id,on_off_flag,cp_name;
-		public Integer offduration;
-		public Long create_time ; 
-	}
-	String id = null; 
+	String id = null;
+	Connection conn;
 	Statement stat = null;
 	ResultSet rs = null; 
-	Connection conn=null;  
-	/**
-	 * 获取离线统计信息 
-	 * 
-	 * */
-	public List<OffLineStatEntity> getOffLineStat(int querydays){
-		List<OffLineDetails> listofflinedetails = new ArrayList<OffLineDetails>();
+	public List<CarMonitorEntity> getCarMonitorEntity(int queryday){
+//		String sql="select " +
+//				"to_char(MONITOR_date,'mm-dd:hh24')as MONITOR_date , " +
+//				"t1.TER_ID,t2.CP_name as CP_ID, " +
+//				"PLATE_NO, OFFCOUNT, " +
+//				"nvl(t1.milse,0)as milse ,"+
+//				"trunc(OFFSECONDS/3600)||'时'|| trunc( mod(OFFSECONDS,3600)/60) ||'分'|| mod(OFFSECONDS,60) ||'秒' as OFFSECONDS,"+
+//				"trunc((86400 - OFFSECONDS)/3600)||'时'|| trunc( mod((86400 - OFFSECONDS),3600)/60) ||'分'|| mod((86400 - OFFSECONDS),60) ||'秒'as onlineSeconds,"+
+//				"nvl(t3.oilmass, 0) as OILMASS," +
+//				"nvl(t3.line_speed, 0) as SPEED," +
+//				"round(nvl(t3.gps_lon_f, 0), 6) || ','||round(nvl(t3.gps_lat_f, 0), 6) as GPS,"+
+//				"mod(nvl(T3.ter_status, 0), 2) AS ACCSTATUS ," +
+//				"to_char(gtime(t3.lasttime),'yymmdd hh24:mi:ss') as pos_time "+
+//				",to_char(gtime(t4.pos_time),'yymmdd hh24:mi:ss') as pos_time0200 "+
+//				"from sa.qlj_car_monitor t1,sa.tbl_company t2 , sa.tbl_s_safe_real t3 ,sa.tbl_s_terminal_last_pos t4 " +
+//				" where  t1.CP_ID =t2.id and trunc(MONITOR_date) = trunc(sysdate-" +i+") " +
+//						"and t1.ter_id = t3.ter_id " +
+//						"and t1.ter_id = t4.ter_id" +
+//				" order by cp_id desc,OFFCOUNT desc,ter_id asc";		
 		
-		String sql= "select " +
-				"ter2.plate_no||'-'||t.ter_id as ter_id ," +
-				"ter2.cp_name," + 				
-				"t.on_off_flag," +
-				"t.create_time, " +
-				"gintime(trunc(sysdate - "+ querydays+ 
-				")) as firstime," + 
-				"trunc(nvl(t.create_time-t2.create_time,t.create_time-gintime(trunc(sysdate) -" +
-				querydays +
-				"))) as offduration " +
-				" from " +
-				"(   select ter_id,on_off_flag,create_time,rownum as rownum1  from " +
-				"(select distinct  ter_id, on_off_flag,create_time,at_time  " +
-				"from tbl_s_terminal_online where " +
-				"trunc(gtime(create_time)) = trunc(sysdate) - " +
-				querydays+
-				" order by ter_id,  create_time asc ,at_time asc  ))T " +
-				"LEFT join " +
-				"(   select ter_id,on_off_flag,create_time,rownum+1 as rownum1  " +
-				"from ( select distinct  ter_id, on_off_flag,create_time,at_time  " +
-				"from tbl_s_terminal_online where trunc(gtime(create_time)) = trunc(sysdate) -" +
-				querydays+
-				"order by ter_id,  create_time asc ,at_time asc  ))T2 " +
-				"on t.ter_id = t2.ter_id and t.rownum1 = t2.rownum1 "+
-				" left join  (" + 
-				" select ter.id,ter.plate_no,com.cp_name from sa.tbl_s_terminal ter ,sa.tbl_company  com where ter.cp_id= com.id ) ter2 "+ 
-						   " on t.ter_id = ter2.id"  
-//				" order by ter2.cp_name, t.ter_id asc"
-//				+ " where t.ter_id in(6,7,30) " ;
-				;
-		conn = new DBHelper().getConn(); 
+		String sql = 
+			" with qlj_online_total as (  "                                                                                                               
+			+"     select "                                                                                                                             
+			+"     ter_id as ter_id, "                                                                                                                  
+			+"     offduaration+decode(last_flag,0,lastduration,0) as offseconds, "                                                                     
+			+"     onduration+decode(last_flag,1,lastduration,0) as  onseconds , "                                                                      
+			+"     getStrTime(offduaration+decode(last_flag,0,lastduration,0)) offstr, "                                                                
+			+"     getStrTime(onduration+decode(last_flag,1,lastduration,0) ) as onstr, "                                                               
+			+"     offcount , "                                                                                                                         
+			+"     to_char((offduaration+decode(last_flag,0,lastduration,0))/ (offduaration +lastduration +onduration  )*100,'00.00') as off_ratio "            
+			+"      from  "                                                                                                                             
+			+"     ( "                                                                                                                                  
+			+"           select  "                                                                                                                      
+			+"           ter_id, "                                                                                                                      
+			+"           sum( decode(on_off_flag,1,create_time- prevtime,0)) as offduaration , "                                                        
+			+"           sum( decode(on_off_flag,0,create_time- prevtime,0)) as onduration,      "                                                      
+			+"           max(last_flag) as last_flag, "                                                                                                 
+			+"           sum(decode(on_off_flag,0,1,0)) as offcount, "                                                                                  
+			+"           decode("+ queryday +", "                                                                                                       
+			+"           0 , "                                                                                                                          
+			+"           max(gintime(sysdate)-lastcreate_time) , "                                                                                      
+			+"           max(86400- (lastcreate_time-gintime(trunc(sysdate-"+ queryday +"))) )     "                                                         
+			+"           )     as lastduration "                                                                                                        
+			+"           from ( "                                                                                                                       
+			+"                 select t.*, "                                                                                                            
+			+"                 lag(create_time, 1, gintime(trunc(sysdate-"+ queryday +")))     over(partition by ter_id order by id asc) as prevtime , "     
+			+"                 max(on_off_flag) keep   (dense_rank last order by id asc ) over(partition by ter_id ) as last_flag , "                   
+			+"                 max(create_time) keep   (dense_rank last order by id asc,create_time asc ) over(partition by ter_id) as lastcreate_time "
+			+"                  from sa.tbl_s_terminal_online t "                                                                                       
+			+"                 where trunc(gtime(create_time)) = trunc(sysdate-"+ queryday +")   "                                                           
+			+"           )t  "                                                                                                                          
+			+"           group by ter_id  "                                                                                                             
+			+"     )t2    "                                                                                                                             
+			+"     union  "                                                                                                                             
+			+"     select "                                                                                                                             
+			+"       ter.id, "                                                                                                                          
+			+"       0 \"离线时间\", "                                                                                                                  
+			+"       decode("+queryday+",0,gintime(trunc(sysdate)),86400 ) as \"上线时间\" , "                                                          
+			+"       '00小时00分00秒' offstr, "                                                                                                         
+			+"       getstrtime(decode("+queryday+",0,(sysdate-trunc(sysdate))*86400,86400 )) onstr, "                                                  
+			+"       0  offcount, "                                                                                                                     
+			+"       '00.00' as off_ratio   "                                                                                                                 
+			+"      from tbl_s_terminal ter  "                                                                                                          
+			+"     where not exists (select * from  tbl_s_terminal_online ol  "                                                                         
+			+"     where ter.id = ol.ter_id and ol.create_time between  gintime(trunc(sysdate-"+ queryday +"))  and gintime(trunc(sysdate-"+ queryday +"+1))  "   
+			+"     ) and exists ( "                                                                                                                     
+			+"     select * from tbl_s_safe_month_hour hour  "                                                                                         
+			+"     where ter.id = hour.ter_id and hour.lasttime between  " 
+			+" 		gintime(trunc(sysdate-"+ queryday +"))*1000  and gintime(trunc(sysdate-"+ queryday +"+1))*1000 "     
+			+"     and rownum =1  "                                                                                                                     
+			+"     ) "                                                                                                                                  
+			+" ) "                                                                                                                                      
+			+" select  "                                                                                                                                
+			+" t2.cp_name ,t2.plate_no,tal.*,nvl(mi.line_dis ,0)as line_dis "                                                                           
+			+"  from qlj_online_total  tal "                                                                                                            
+			+" inner join ( "                                                                                                                           
+			+" select ter.id,ter.plate_no,com.cp_name from sa.tbl_s_terminal ter ,tbl_company com  "                                                    
+			+" where ter.cp_id = com.id  "                                                                                                              
+			+" )t2  "                                                                                                                                   
+			+"  on tal.ter_id = t2.id  "                                                                                                                
+			+" left join ( select ter_id ,sum(line_dis) as line_dis from  sa.tbl_s_safe_month_mi where lasttime  "                                      
+			+"      between  gintime(trunc(sysdate-"+ queryday +"))*1000    and gintime(trunc(sysdate-"+ queryday +"+1))*1000 "                                   
+			+"       group by ter_id ) mi   "                                                                                                           
+			+" on tal.ter_id = mi.ter_id   "                                                                                                            
+			+" order by cp_name desc ,offseconds desc   ";                                                                                              
+                                                                                                                                                  
+
+		List<CarMonitorEntity> carentities = new ArrayList<CarMonitorEntity>();
+		conn = new DBHelper().getConn();
+		System.err.println("conn"+conn);
 		try{
 			stat = conn.createStatement();
 			System.err.println(sql);
 			rs = stat.executeQuery(sql);
-			while (rs.next()) {  
-				OffLineDetails offlinetmp = new OffLineDetails();
-				offlinetmp.ter_id = rs.getString("ter_id");
-				offlinetmp.on_off_flag = rs.getString("on_off_flag");
-				offlinetmp.cp_name = rs.getString("cp_name"); 
-				try { 
-					offlinetmp.offduration = Integer.valueOf( rs.getString("offduration"));
-					offlinetmp.create_time = Long.parseLong(rs.getString("create_time"));
-				} catch (Exception e) {
-					System.err.println("异常纪录"+rs.getString("ter_id"));	
-					e.printStackTrace();
-				}
-				listofflinedetails.add( offlinetmp);
+			while (rs.next()) {
+				CarMonitorEntity cartmp = new CarMonitorEntity(); 
+				System.err.println(rs.getString("cp_name"));
+				cartmp.cp_name = rs.getString("cp_name");
+				cartmp.plate_no = rs.getString("plate_no");
+				cartmp.ter_id = rs.getString("ter_id");
+				cartmp.offseconds = rs.getString("offseconds");
+				cartmp.onseconds = rs.getString("onseconds");
+				cartmp.offstr = rs.getString("offstr");
+				cartmp.onstr = rs.getString("onstr");
+				cartmp.offcount = rs.getString("offcount");
+				cartmp.off_ratio = rs.getString("off_ratio");
+				cartmp.line_dis = rs.getString("line_dis"); 
+//				id = rs.getString("Student_ID");
+//				String MONITOR_date, TER_ID, CP_ID, PLATE_NO, OFFCOUNT, OFFSECONDS,
+//				OILMASS, SPEED, GPS, ACCSTATUS, MILSE;
+//				cartmp.MONITOR_date = rs.getString("MONITOR_date");
+//				cartmp.TER_ID = rs.getString("TER_ID");
+//				cartmp.CP_ID = rs.getString("CP_ID");
+//				cartmp.PLATE_NO = rs.getString("PLATE_NO");
+//				cartmp.OFFCOUNT = rs.getString("OFFCOUNT");
+//				cartmp.OFFSECONDS = rs.getString("OFFSECONDS");
+//				cartmp.onlineSeconds = rs.getString("onlineSeconds");				
+//				cartmp.OILMASS = rs.getString("OILMASS");
+//				cartmp.SPEED = rs.getString("SPEED");
+//				cartmp.GPS = rs.getString("GPS");
+//				cartmp.ACCSTATUS = rs.getString("ACCSTATUS");
+//				cartmp.MILSE = rs.getString("MILSE");
+//				cartmp.pos_time = rs.getString("pos_time");
+//				cartmp.pos_time0200 = rs.getString("pos_time0200");	
+				carentities.add(cartmp);
+//				System.err.println("test:");
+//				System.err.println(rs.getString("ter_id"));
 			}
+			System.err.println("carentities:"+carentities.size());
 		}
 		catch(SQLException ex){
-			ex.printStackTrace();
-		}
-		//关闭数据库
+			ex.printStackTrace();			
+		} 
 		closeDB(); 
-		//返回统计后的离线结果
-		return  getOffLineStat(listofflinedetails,querydays);
-//		return null;
+		return carentities;
 	}
-	
-	//返回处理后的离线统计结果
-		public   List<OffLineStatEntity> getOffLineStat(List<OffLineDetails>  listofflinedetails,int querydays){
-			 List<OffLineStatEntity> listofflinestat = new ArrayList<OffLineStatEntity>();
-			 String terid_tmp ="initid";	//终端ID 
-			 int  offcount =0;	   // 离线次数
-			 long offseconds = 0;  //离线时间秒
-			 long onSeconds=0; //在线时长
-			 int  recordNUM= 0 ;    //纪录数   
-			 for (int i = 0; i < listofflinedetails.size(); i++) {
-				 OffLineDetails  offdetail = listofflinedetails.get(i);
-				//判定终端是否结束 初始化终端ID
-				 if (i==0) {
-					 terid_tmp = offdetail.ter_id; 
-				} 
-				 if (offdetail.ter_id.equals("闽A5C711-30")) {
-					System.err.println("闽A5C711-30");
-				}
-				 //出现新的终端 且不是第一条记录
-				 if (!offdetail.ter_id.equals(terid_tmp)& i>0) {
-					 OffLineStatEntity offlinestat = new OffLineStatEntity();
-					 offlinestat.plate_no = terid_tmp;
-					 offlinestat.offcount = String.valueOf( offcount);		
-					 offlinestat.cp_name =  listofflinedetails.get(i-1).cp_name;
-					 //状态为1代表上线，说明前面一个时间段为离线时长	 
-						if( listofflinedetails.get(i-1).on_off_flag.equals("1")){ 			
-							//在线时长
-							onSeconds=onSeconds+getlastofftimes(  listofflinedetails.get(i-1).create_time,querydays);
-						}else {
-							//最后一条离线时间
-							offseconds=offseconds+getlastofftimes(listofflinedetails.get(i-1).create_time,querydays);						 
-						}					 
-					 //如果出现只有一条记录情况
-					 if (offseconds==0 & onSeconds>0& querydays>0) {
-						 offseconds=86400 -onSeconds;
-					 }else if (offseconds>0 & onSeconds==0& querydays>0) {
-						 onSeconds=86400 -offseconds;
-					}
-					 offlinestat.offSecends= String.valueOf(offseconds);
-					 offlinestat.onSeconds =String.valueOf(onSeconds);  //当日在线时长
-					 
-					 listofflinestat.add(offlinestat);
-					 
-					 //重置统计参数
-					   offcount =0;		    // 离线次数
-					   offseconds = 0;  	//离线时间秒
-					   onSeconds=0;    //在线时长
-					   recordNUM= 0 ;		//纪录数  
-					   terid_tmp =  offdetail.ter_id;
-				} 
-				if( offdetail.on_off_flag.equals("1")){  //状态为1代表上线，说明前面一个时间段为离线时长				
-					offseconds=offseconds+offdetail.offduration;
-					offcount++;
-				}else {//在线时长 
-					onSeconds=onSeconds+offdetail.offduration;
-				} 
-				recordNUM++;					
-			 
-	
-				 //最后一条数据情况
-				 if (i==listofflinedetails.size()-1 ) {
-					 OffLineStatEntity offlinestat = new OffLineStatEntity();
-					 offlinestat.plate_no = terid_tmp; 
-					 offlinestat.offcount = String.valueOf( offcount);	
-					 offlinestat.cp_name= offdetail.cp_name;
-					 //状态为1代表上线，说明前面一个时间段为离线时长	 
-						if( offdetail.on_off_flag.equals("1")){ 			
-							//在线时长
-							onSeconds=onSeconds+getlastofftimes(offdetail.create_time,querydays);
-						}else {
-							//最后一条离线时间
-							offseconds=offseconds+getlastofftimes(offdetail.create_time,querydays);						 
-						}
-					offlinestat.offSecends= String.valueOf(offseconds);
-					offlinestat.onSeconds = String.valueOf(onSeconds); ;  //当日在线时长	
-					listofflinestat.add(offlinestat);
-				}			
-			}			 			 
-			 return sortlist(listofflinestat);
-		}
-		/**
-		 * 排序 
-		 * */
-	private List<OffLineStatEntity>  sortlist(List<OffLineStatEntity>  list){
-		OffLineStatEntity[] offarray = list.toArray(new OffLineStatEntity[list.size()] );
-		for (int i = 0; i < offarray.length; i++) {
-			for (int j = 0; j < offarray.length; j++) {
-				if (((OffLineStatEntity)offarray[i]).cp_name.compareTo(offarray[j].cp_name)>=0) {
-					OffLineStatEntity tmp =  offarray[i];
-					offarray[i]=offarray[j];
-					offarray[j]=tmp;
-				}
-			}
-		}
-//		System.err.println("===="+Arrays.asList(offarray));
-//		for (int i = 0; i < offarray.length; i++) {
-////			System.err.println("===="+offarray[i].cp_name+offarray[i].plate_no);		
-//		}
-		return  Arrays.asList(offarray );
-		
-	} 
 	private void closeDB(){
 		//关闭数据库
 		try {
@@ -206,52 +167,12 @@ public class OffLineDAO {
 				System.err.println("关闭conn");
 				conn.close();
 			} 		
-		} catch (SQLException e) { 
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * 获取终端最后离线后离统计当日的时长 返回秒 
-	 * 如23时 离线 则返回3600 
-	 * curtime统计天最早时间 queryday查询时间 offsends离线时间秒
-	 **/
-	public static long getlastofftimes(long curtime,int queryday ){
-		if (queryday==0) {
-			return System.currentTimeMillis()/1000-curtime ;
-		}
-		else {			
-			Date d=new Date();
-			SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd"); 
-			String d2 = df.format(new Date(d.getTime() - queryday * 24 * 60 * 60 * 1000));
-			try {
-				Date date = df.parse(d2); //得到凌晨的时间 
-				return  (86400+date.getTime()/1000 -curtime);
-			} catch (ParseException e) { 
-				e.printStackTrace();
-			}	
-		}
-		return 0;
-	} 
-	private static String getTimes(Long longtime){
-		return longtime/3600+"时"+ (longtime%3600)/60+"分"+ longtime%60+"秒";
-	}
-	
-	/**
-	 * 
-	 * */
 	public static void main(String[] args) {
-		OffLineDAO off = new OffLineDAO();  
-		List<OffLineStatEntity> listofflinestat = off.getOffLineStat(1);
-//		System.err.println(listofflinestat.size());
-		for (int i = 0; i < listofflinestat.size(); i++) { 
-			System.err.println("终端:"+listofflinestat.get(i).cp_name+listofflinestat.get(i).plate_no  +
-					" 的离线时长为"+getTimes(Long.valueOf(listofflinestat.get(i).offSecends))+ 
-			"在线时长"+getTimes(Long.valueOf(listofflinestat.get(i).onSeconds)) + "     离线次数" +	listofflinestat.get(i).offcount 
-			);
-		} 
- 
-		 
+	System.err.println(	new OffLineDAO().getCarMonitorEntity(0));	
+		
 	}
 }
-
-

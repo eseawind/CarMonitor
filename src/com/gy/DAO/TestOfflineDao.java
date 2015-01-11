@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List; 
 import java.util.Map;
 import com.gy.CarMonitor.*; 
-import com.gy.DAO.OffLineDAO.OffLineDetails;
+import com.gy.DAO.OffLineDAOold.OffLineDetails;
 import com.gy.Entity.OffLineStatEntity;
 public class TestOfflineDao {
 	//终端上下线明细类
@@ -118,10 +118,75 @@ public class TestOfflineDao {
 	}
 	
 	public static void main(String[] args) {
-		TestOfflineDao t = new TestOfflineDao();
-		t.getOffLineStat(t.getOffLineDetails(1));
- 
-		 
+		int queryday =0;
+		String sql = 
+			" with qlj_online_total as (  "                                                                                                               
+			+"     select "                                                                                                                             
+			+"     ter_id as ter_id, "                                                                                                                  
+			+"     offduaration+decode(last_flag,0,lastduration,0) as offseconds, "                                                                     
+			+"     onduration+decode(last_flag,1,lastduration,0) as  onseconds , "                                                                      
+			+"     getStrTime(offduaration+decode(last_flag,0,lastduration,0)) offstr, "                                                                
+			+"     getStrTime(onduration+decode(last_flag,1,lastduration,0) ) as onstr, "                                                               
+			+"     offcount , "                                                                                                                         
+			+"     to_char((offduaration+decode(last_flag,0,lastduration,0))/ (offduaration +lastduration +onduration  )*100,'00.00') as off_ratio "            
+			+"      from  "                                                                                                                             
+			+"     ( "                                                                                                                                  
+			+"           select  "                                                                                                                      
+			+"           ter_id, "                                                                                                                      
+			+"           sum( decode(on_off_flag,1,create_time- prevtime,0)) as offduaration , "                                                        
+			+"           sum( decode(on_off_flag,0,create_time- prevtime,0)) as onduration,      "                                                      
+			+"           max(last_flag) as last_flag, "                                                                                                 
+			+"           sum(decode(on_off_flag,0,1,0)) as offcount, "                                                                                  
+			+"           decode("+ queryday +", "                                                                                                       
+			+"           0 , "                                                                                                                          
+			+"           max(gintime(sysdate)-lastcreate_time) , "                                                                                      
+			+"           max(86400- (lastcreate_time-gintime(trunc(sysdate-"+ queryday +"))) )     "                                                         
+			+"           )     as lastduration "                                                                                                        
+			+"           from ( "                                                                                                                       
+			+"                 select t.*, "                                                                                                            
+			+"                 lag(create_time, 1, gintime(trunc(sysdate-"+ queryday +")))     over(partition by ter_id order by id asc) as prevtime , "     
+			+"                 max(on_off_flag) keep   (dense_rank last order by id asc ) over(partition by ter_id ) as last_flag , "                   
+			+"                 max(create_time) keep   (dense_rank last order by id asc,create_time asc ) over(partition by ter_id) as lastcreate_time "
+			+"                  from sa.tbl_s_terminal_online t "                                                                                       
+			+"                 where trunc(gtime(create_time)) = trunc(sysdate-"+ queryday +")   "                                                           
+			+"           )t  "                                                                                                                          
+			+"           group by ter_id  "                                                                                                             
+			+"     )t2    "                                                                                                                             
+			+"     union  "                                                                                                                             
+			+"     select "                                                                                                                             
+			+"       ter.id, "                                                                                                                          
+			+"       0 \"离线时间\", "                                                                                                                  
+			+"       decode("+queryday+",0,gintime(trunc(sysdate)),86400 ) as \"上线时间\" , "                                                          
+			+"       '00小时00分00秒' offstr, "                                                                                                         
+			+"       getstrtime(decode("+queryday+",0,(sysdate-trunc(sysdate))*86400,86400 )) onstr, "                                                  
+			+"       0  offcount, "                                                                                                                     
+			+"       '00.00' as off_ratio   "                                                                                                                 
+			+"      from tbl_s_terminal ter  "                                                                                                          
+			+"     where not exists (select * from  tbl_s_terminal_online ol  "                                                                         
+			+"     where ter.id = ol.ter_id and ol.create_time between  gintime(trunc(sysdate-"+ queryday +"))  and gintime(trunc(sysdate-"+ queryday +"+1))  "   
+			+"     ) and exists ( "                                                                                                                     
+			+"     select * from tbl_s_safe_month_hour hour  "                                                                                         
+			+"     where ter.id = hour.ter_id and hour.lasttime between  " 
+			+" 		gintime(trunc(sysdate-"+ queryday +"))*1000  and gintime(trunc(sysdate-"+ queryday +"+1))*1000 "     
+			+"     and rownum =1  "                                                                                                                     
+			+"     ) "                                                                                                                                  
+			+" ) "                                                                                                                                      
+			+" select  "                                                                                                                                
+			+" t2.cp_name ,t2.plate_no,tal.*,nvl(mi.line_dis ,0)as line_dis "                                                                           
+			+"  from qlj_online_total  tal "                                                                                                            
+			+" inner join ( "                                                                                                                           
+			+" select ter.id,ter.plate_no,com.cp_name from sa.tbl_s_terminal ter ,tbl_company com  "                                                    
+			+" where ter.cp_id = com.id  "                                                                                                              
+			+" )t2  "                                                                                                                                   
+			+"  on tal.ter_id = t2.id  "                                                                                                                
+			+" left join ( select ter_id ,sum(line_dis) as line_dis from  sa.tbl_s_safe_month_mi where lasttime  "                                      
+			+"      between  gintime(trunc(sysdate-"+ queryday +"))*1000    and gintime(trunc(sysdate-"+ queryday +"+1))*1000 "                                   
+			+"       group by ter_id ) mi   "                                                                                                           
+			+" on tal.ter_id = mi.ter_id   "                                                                                                            
+			+" order by cp_name desc ,offseconds desc   ";                                                                                              
+
+		System.err.println(sql);
+	
 	}
 }
 

@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gy.DAO.OffLineDAO;
+import com.gy.DAO.OffLineDAOold;
 import com.gy.DAO.RealMonitorDAO;
+import com.gy.Entity.CarMonitorEntity;
 import com.gy.Entity.OffLineStatEntity;
 import com.gy.Entity.RealMonitorEntity;
 
@@ -71,6 +73,8 @@ public class OffLineMonitor extends HttpServlet {
 				 		"<td bgcolor=\"#D5E4F4\"  ><strong>离线时间</strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"  ><strong>上线时间 </strong></td>" +
 				 		"<td bgcolor=\"#D5E4F4\"  ><strong>离线次数 </strong></td>"  +
+				 		"<td bgcolor=\"#D5E4F4\"  ><strong>离线时间占比 </strong></td>"  +
+				 		"<td bgcolor=\"#D5E4F4\"  ><strong>当日行驶里程(公里) </strong></td>"  +				 		
 				 		"</tr>"    
 //				 		 
 				 ); 
@@ -80,31 +84,55 @@ public class OffLineMonitor extends HttpServlet {
 		out.close();
 	}
 
+//	public String getOffLineInfo(int querydays){
+//		String result="";
+//		OffLineDAOold offlineDAO = new OffLineDAOold();
+//		List<OffLineStatEntity> offlist= offlineDAO.getOffLineStat(querydays);
+//		String linecolor ="";
+//		int line=1;
+//		for (OffLineStatEntity off:offlist) {
+//				if (line%2==0) {
+//					linecolor="bgcolor=\"#D5E4ff\"";
+//				}else{
+//					linecolor="";
+//				}
+//				result =result+"<tr "+linecolor+ " align=\"center\">" +
+//				"<td>"+off.cp_name+"-"+off.plate_no +"</td>" +
+//				"<td>" +getStrTimes(off.offSecends) +"</td>" +
+//				"<td>" + getStrTimes(off.onSeconds )+"</td>" +
+//				"<td>" + off.offcount +"</td>" +
+//				"</tr>";
+////				if (line<2) {					
+//////					System.err.println(result);
+////				}
+//				line++;	 
+//		}
+//		return result;
+//	}
 	public String getOffLineInfo(int querydays){
 		String result="";
-		OffLineDAO offlineDAO = new OffLineDAO();
-		List<OffLineStatEntity> offlist= offlineDAO.getOffLineStat(querydays);
+		OffLineDAO offdao = new OffLineDAO();
 		String linecolor ="";
 		int line=1;
-		for (OffLineStatEntity off:offlist) {
-				if (line%2==0) {
-					linecolor="bgcolor=\"#D5E4ff\"";
-				}else{
-					linecolor="";
-				}
-				result =result+"<tr "+linecolor+ " align=\"center\">" +
-				"<td>"+off.cp_name+"-"+off.plate_no +"</td>" +
-				"<td>" +getStrTimes(off.offSecends) +"</td>" +
-				"<td>" + getStrTimes(off.onSeconds )+"</td>" +
-				"<td>" + off.offcount +"</td>" +
-				"</tr>";
-//				if (line<2) {					
-////					System.err.println(result);
-//				}
-				line++;	 
-		}
+		for ( CarMonitorEntity carmonitor : offdao.getCarMonitorEntity(querydays)) {
+					if (line%2==0) {
+						linecolor="bgcolor=\"#D5E4ff\"";
+					}else{
+						linecolor="";
+					}
+					result =result+"<tr "+linecolor+ " align=\"center\">" +
+					"<td>"+carmonitor.cp_name+"-"+carmonitor.plate_no+carmonitor.ter_id +"</td>" +
+					"<td>" +carmonitor.offstr +"</td>" +
+					"<td>" + carmonitor.onstr+"</td>" +
+					"<td>" + carmonitor.offcount +"</td>" +
+					"<td>" + carmonitor.off_ratio +"</td>" +
+					"<td>" + carmonitor.line_dis +"</td>" +
+					"</tr>"; 
+					line++;	 
+			}		 
 		return result;
 	}
+	
 	private String getStrTimes(String strtime){
 		int times=0 ;
 		try {
@@ -119,7 +147,8 @@ public class OffLineMonitor extends HttpServlet {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		OffLineMonitor off = new OffLineMonitor();
+		System.err.println(off.getOffLineInfo(1));
 	}
 
 }

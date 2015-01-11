@@ -65,6 +65,9 @@ public class ViewMap extends HttpServlet {
 				" var ggPoint = new BMap.Point("+lona + ","+lata +");\n" +
 				" var ggPoint2 = new BMap.Point("+lonb + ","+latb +");\n" +
 				" var bm = new BMap.Map(\"allmap\");\n" +
+				" bm.enableScrollWheelZoom(); \n " +   //滚动条
+				" bm.addControl(new BMap.MapTypeControl());" +  //地图类型
+				" bm.addControl(new BMap.ScaleControl());                    "+// 添加比例尺控件
 				" bm.centerAndZoom(ggPoint, 15);\n" +
 				" bm.addControl(new BMap.NavigationControl());\n" +
 				" translateCallbackA = function (point){ \n" +
@@ -82,35 +85,7 @@ public class ViewMap extends HttpServlet {
 				" }\n" +
 				" BMap.Convertor.translate(ggPoint,0,translateCallbackA);\n" +
 				strgpspoint2+
-				" </script>\n"); 
-//		out.append("lona:"+lona+ ",lata="+lata);
-		String strtest ="";
-		strtest =strhtml1 + "<script type=\"text/javascript\">\n" +
-//		" var x ="+ lona +";\n" +
-//		" var y ="+ lata +";\n" +
-//		" var ggPoint =  new BMap.Point(x,y);\n" +
-		" var ggPoint = new BMap.Point("+lona + ","+lata +");\n" +
-		" var ggPoint2 = new BMap.Point("+lonb + ","+latb +");\n" +
-		" var bm = new BMap.Map(\"allmap\");\n" +
-		" bm.centerAndZoom(ggPoint, 13);\n" +
-		" bm.addControl(new BMap.NavigationControl());\n" +
-		" translateCallbackA = function (point){ \n" +
-		" var marker = new BMap.Marker(point);\n" +
-		" bm.addOverlay(marker);\n" +
-		" var label = new BMap.Label(\"起点\",{offset:new BMap.Size(20,-10)});\n" +
-		" marker.setLabel(label); \n" +
-		"	}\n" +
-		" translateCallbackB = function (point){ \n" +
-		" var marker = new BMap.Marker(point);\n" +
-		" bm.addOverlay(marker);\n" +
-		" var label = new BMap.Label(\"终点\",{offset:new BMap.Size(20,-10)});\n" +
-		" marker.setLabel(label); \n" +
-		" bm.setCenter(point);\n" +
-		" }\n" +
-		" BMap.Convertor.translate(ggPoint,0,translateCallbackA);\n" +
-		strgpspoint2+
-		" </script>\n";
-		System.err.println(strtest);
+				" </script>\n");  
 		
 		out.flush();
 		out.close();

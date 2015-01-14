@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Timers>
+	<Timer>
+		<jobId>1</jobId>
+		<jobName>com.gy.timer.TerOnlineMonitorTimer</jobName>
+		<interVal>120000</interVal>
+	</Timer>
+	<Timer>
+		<jobId>2</jobId>
+		<jobName>com.gy.timer.ProcedureMonitorTimer</jobName>
+		<interVal>10000</interVal>
+	</Timer>	
+	<!-- 
+	<Timer>
+		<jobId>3</jobId>
+		<jobName>test2</jobName>
+		<interVal>20000</interVal>
+	</Timer>
+	 -->
+</Timers>

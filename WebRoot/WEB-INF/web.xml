@@ -14,11 +14,15 @@
  <listener>
   <listener-class>com.gy.timer.SafeReportMonitorListner</listener-class>
  </listener>
--->
+
 
 
  <listener>
   <listener-class>com.gy.timer.TerOnlineMonitorListner</listener-class>
+ </listener>
+ -->
+  <listener>
+  <listener-class>com.gy.timer.CoreListner</listener-class>
  </listener>
  <servlet>
   <description>This is the description of my J2EE component</description>

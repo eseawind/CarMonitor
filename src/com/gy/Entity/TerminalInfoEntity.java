@@ -1,6 +1,6 @@
 package com.gy.Entity;
 
-public class TerminalInfoEntity {
+public class TerminalInfoEntity  extends GyMonitorEntity{
 	
 	String ter_id;
 	String plate_no,cp_name,gps_lon,gps_lat,gps_lon0200,gps_lat0200;
@@ -134,7 +134,7 @@ public class TerminalInfoEntity {
 	}
 	@Override
 	public String toString() { 
-		return this.cp_name+'-'+this.plate_no+'-'+this.ter_id;
+		return this.cp_name+'-'+this.plate_no+'-'+this.ter_id+ " 最后时间:"+getLasttime();
 	}
 	/**
 	 * @param args

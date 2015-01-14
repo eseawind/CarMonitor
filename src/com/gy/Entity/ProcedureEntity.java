@@ -1,78 +1,80 @@
 package com.gy.Entity;
 
-public class ProcedureEntity {
-	String proName,status,lasttime,taskid,duration,intervalue,nexttime,lastResult,lastLog;
-
+public class ProcedureEntity extends GyMonitorEntity{
+	String proName,status,lastdate,jobid,duration,interval,nextdate,lastResult,lastLog;
+	String thisdate;
+	String sql ="select job,what as procname ,LAST_DATE ,next_date ,interval ,this_date,failures ,broken  from user_jobs a ";
 	public String getProName() {
 		return proName;
 	}
-
 	public void setProName(String proName) {
 		this.proName = proName;
 	}
-
 	public String getStatus() {
 		return status;
 	}
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	public String getLasttime() {
-		return lasttime;
+	public String getLastdate() {
+		return lastdate;
 	}
-
-	public void setLasttime(String lasttime) {
-		this.lasttime = lasttime;
+	public void setLastdate(String lastdate) {
+		this.lastdate = lastdate;
 	}
-
-	public String getTaskid() {
-		return taskid;
+	public String getJobid() {
+		return jobid;
 	}
-
-	public void setTaskid(String taskid) {
-		this.taskid = taskid;
+	public void setJobid(String jobid) {
+		this.jobid = jobid;
 	}
-
 	public String getDuration() {
 		return duration;
 	}
-
 	public void setDuration(String duration) {
 		this.duration = duration;
 	}
-
-	public String getIntervalue() {
-		return intervalue;
+	public String getInterval() {
+		return interval;
 	}
-
-	public void setIntervalue(String intervalue) {
-		this.intervalue = intervalue;
+	public void setInterval(String interval) {
+		this.interval = interval;
 	}
-
-	public String getNexttime() {
-		return nexttime;
+	public String getNextdate() {
+		return nextdate;
 	}
-
-	public void setNexttime(String nexttime) {
-		this.nexttime = nexttime;
+	public void setNextdate(String nextdate) {
+		this.nextdate = nextdate;
 	}
-
 	public String getLastResult() {
 		return lastResult;
 	}
-
 	public void setLastResult(String lastResult) {
 		this.lastResult = lastResult;
 	}
-
 	public String getLastLog() {
 		return lastLog;
 	}
-
 	public void setLastLog(String lastLog) {
 		this.lastLog = lastLog;
 	}
+	public String getThisdate() {
+		return thisdate;
+	}
+	public void setThisdate(String thisdate) {
+		this.thisdate = thisdate;
+	}
+	public String getSql() {
+		return sql;
+	}
+	public void setSql(String sql) {
+		this.sql = sql;
+	}
+	@Override
+	public String toString() { 
+		return this.proName +'-'+this.lastdate+'-'+this.lastLog ;
+	}
+	
+	 
 	
 }

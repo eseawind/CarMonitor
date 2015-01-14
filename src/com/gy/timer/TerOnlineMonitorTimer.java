@@ -19,7 +19,7 @@ import com.gy.CarMonitor.DBHelper;
 import com.gy.Entity.TerminalInfoEntity;
 import com.gy.listener.OffTerminalInfo;
 
-public class TerOnlineMonitorTimer extends TimerTask {
+public class TerOnlineMonitorTimer extends GyBusiJob {
 	private ServletContext servletContext;
 	private static boolean isRunning = false;
 	public static int sendcount = 0;
@@ -32,6 +32,9 @@ public class TerOnlineMonitorTimer extends TimerTask {
 	public TerOnlineMonitorTimer(ServletContext servletContext) {
 		this.servletContext = servletContext;
 	} 
+	public TerOnlineMonitorTimer(   ) { 
+		
+	}	
 	/**
 	 * 获取上下线列表 
 	 * */
@@ -44,7 +47,7 @@ public class TerOnlineMonitorTimer extends TimerTask {
 		"       lpos.pos_lat,"+
 		"       lpos.ter_status,"+
 		"       lpos.pos_speed,"+
-		"       gtime(lpos.pos_time) as lasttime "+
+		"       to_char(gtime(lpos.pos_time),'yyyy-mm-dd hh24:mi:ss') as lasttime "+
 		"  from tbl_s_terminal ter  "+
 		" inner join sa.tbl_s_terminal_last_pos lpos  "+
 		"    on ter.id = lpos.ter_id  "+
@@ -145,6 +148,7 @@ public class TerOnlineMonitorTimer extends TimerTask {
 		return newwarnedmaptmp; 
 	}
 	
+	
 	HashMap<String, TerminalInfoEntity> getWarnedclearMap(int warncount){		
 		HashMap<String, TerminalInfoEntity> warnedclearmaptmp = new  HashMap<String, TerminalInfoEntity>();
 		//只有告警列表超过阀值warncount后才会判断告警，
@@ -163,7 +167,57 @@ public class TerOnlineMonitorTimer extends TimerTask {
 		} 	
 		System.err.println("告警解除:"+warnedclearmaptmp);
 		return warnedclearmaptmp ; 
-	}	
+	} 
+	
+//	@SuppressWarnings("unchecked")
+//	String noticeWarnContent(HashMap<String, TerminalInfoEntity> warnedmap ,HashMap<String, TerminalInfoEntity> warncleanMap){
+//		String content="离线告警:;";
+//        Iterator itr = warnedmap.entrySet().iterator();
+//        while (itr.hasNext()) { 
+//            Map.Entry entry = (Map.Entry) itr.next(); 
+//            TerminalInfoEntity terinfo =  (TerminalInfoEntity) entry.getValue();
+//            content =content+terinfo+ " 最后汇报时间:"+terinfo.getLasttime()+";"; 
+//			}
+//        Iterator itr2 = warncleanMap.entrySet().iterator();
+//        content=content+"告警解除:;";
+//        while (itr2.hasNext()) { 
+//            Map.Entry entry = (Map.Entry) itr2.next(); 
+//            TerminalInfoEntity terinfo =  (TerminalInfoEntity) entry.getValue();
+//            content =content+terinfo+terinfo.getLasttime()+";"; 
+//			}        
+//        return content;
+//	}
+	
+//	void insert4DB (String contenct){
+//		String sql ="";
+//		sql= "insert into tbl_m_warn_main(id,warntype,warnsubtype,status,content,crtime,info_flag) values "+
+//		"( seq_m_warn_main.nextval ,2,201,0 ,'"+contenct +"',"+
+//		(int)(System.currentTimeMillis()/1000) +
+//		",0)";
+//		System.err.println("sql"+sql);
+//		Connection conn;
+//		Statement stat = null;		
+//		conn = new DBHelper().getConn(); 		
+//		try {
+//			stat = conn.createStatement();
+//			stat.executeUpdate(sql); 
+//		} catch (SQLException e) { 
+//			e.printStackTrace();
+//		}
+//		try {
+//			stat.close();
+//			conn.close();
+//		} catch (SQLException e) { 
+//			e.printStackTrace(); 
+//		}finally{
+//			try {
+//				stat.close();
+//				conn.close();
+//			} catch (SQLException e) { 
+//				e.printStackTrace();
+//			}
+//		}		
+//	}
 	@Override
 	public void run() { 
 		System.err.println("TerOnlineMonitorTimer is running "+ System.currentTimeMillis());
@@ -180,16 +234,22 @@ public class TerOnlineMonitorTimer extends TimerTask {
 		+ " 告警通知列表"+this.warned4NoticeHashmap.size()
 		+ " 终端下线列表"+this.warnedHashmap.size()
 		);
-		
+		if (warned4NoticeHashmap.size()+warnedclearHashmap.size()>0 ) {		
+			String contenct =noticeWarnContent(warned4NoticeHashmap,warnedclearHashmap);
+			insert4DB(contenct,"2","201",(int)(System.currentTimeMillis()/1000));
+			System.err.println(contenct);
+		}
 	}
 	public static void main(String[] args) {
 		
 		TerOnlineMonitorTimer ter = new TerOnlineMonitorTimer(null);
-		ter.run();
-		ter.run();
-		ter.run();
-		ter.run();
-		ter.run();
-//		ter.run();
+		TerminalInfoEntity t = new TerminalInfoEntity();
+		TerminalInfoEntity t2 = new TerminalInfoEntity();
+		HashMap<String, TerminalInfoEntity> warnedmap = new HashMap<String, TerminalInfoEntity>();
+		HashMap<String, TerminalInfoEntity> warnedmap2 = new HashMap<String, TerminalInfoEntity>();
+		warnedmap.put("1",  t );
+		warnedmap2.put("2",  t2 );
+		ter.noticeWarnContent(warnedmap, warnedmap2);
+
 	}
 }
